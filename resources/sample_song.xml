@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<song>
+<properties>
+<titles>
+<title>Be thou my vision, O Lord of my heart</title>
+<title>Alternative title for Be thou my vision</title>
+</titles>
+<verseOrder>o1 v1</verseOrder>
+<authors>
+<author>Mary Elizabeth Byrne</author>
+<author>Eleanor Henrietta Hull</author>
+</authors>
+<songbooks>
+<songbook name="StF" entry="545"/>
+<songbook name="H+P" entry="123"/>
+</songbooks>
+</properties>
+<lyrics>
+<verse name="o1">
+Be thou my vision, O Lord of my heart
+StF 545
+</verse>
+<verse name="v1">
+1: Be thou my vision, O Lord of my heart,
+be all else but naught to me, save that thou art;
+be thou my best thought in the day and the night,
+both waking and sleeping, thy presence my light.
+</verse>
+<verse name="v2">
+2: Be thou my wisdom, be thou my true word,
+be thou ever with me, and I with thee, Lord;
+be thou my great Father, thy child let me be;
+be thou in me dwelling, and I one with thee.
+</verse>
+<verse name="v3">
+3: Be thou my breastplate, my sword for the fight;
+be thou my whole armour, be thou my true might;
+be thou my soul's shelter, be thou my strong tower:
+O raise thou me heavenward, great Power of my power.
+</verse>
+<verse name="v4">
+4: Riches I heed not, nor earth's empty praise:
+be thou mine inheritance now and always;
+be thou and thou only the first in my heart:
+O Sovereign of heaven, my treasure thou art.
+</verse>
+<verse name="v5">
+5: High King of heaven, thou heaven's bright Sun,
+O grant me its joys after victory is won;
+Great Heart of my own heart, whatever befall,
+still be thou my vision, O Ruler of all.
+</verse>
+</lyrics>
+</song>
