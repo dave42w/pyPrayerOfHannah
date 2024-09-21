@@ -1,6 +1,7 @@
 import xmltodict # type: ignore
 import os 
 import db
+from sqlmodel import Session
 
 PATH_TO_XML = 'resources'
 
@@ -82,6 +83,18 @@ def get_verses(xml_dict) -> list:
                 
     return result
 
+def save_authors(authors: list) -> None:
+    with Session(db.ENGINE) as session, session.begin():
+        for author in authors:
+            names: list = author.split()
+            n: str = names[-1] + ','
+            for na in names[0:-1]:
+                n = n + ' ' + na
+                a = db.Author(name=n)
+            session.add(a)
+            print(f'Saving author:{a}')
+
+
 def main():
     # Scan the directory and get
     # an iterator of os.DirEntry objects
@@ -117,6 +130,8 @@ def main():
 
                 verses: list = get_verses(xml_dict)
                 print(f'#{verses}')
+
+                save_authors(authors)
 
     print("end")
 

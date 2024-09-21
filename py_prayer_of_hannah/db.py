@@ -12,11 +12,12 @@ class SQLModelValidation(SQLModel):
         from_attributes=True, validate_assignment=True 
     )
 
-# Create an engine (connection to the database)
-#engine = create_engine('sqlite:///PrayerOfHannah.sqlite')
-engine = create_engine('sqlite:///PrayerOfHannah.sqlite', echo=True)
+ECHO_SQL = True
+# Create an ENGINE (connection to the database)
+ENGINE = create_engine('sqlite:///PrayerOfHannah.sqlite', echo=ECHO_SQL)
+print("Database Engine Connected")
 
-@event.listens_for(engine, "connect")
+@event.listens_for(ENGINE, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor = dbapi_connection.cursor()
     cursor.execute("PRAGMA foreign_keys=ON")
@@ -24,7 +25,7 @@ def set_sqlite_pragma(dbapi_connection, connection_record):
 
 #Maybe clean up with a dependency like:
 def get_session():
-    with Session(engine) as session:
+    with Session(ENGINE) as session:
         yield session
 
 class Author(SQLModelValidation, table=True):
@@ -74,11 +75,13 @@ class Song(SQLModelValidation, table=True):
     author: Author = Relationship(back_populates="songs")
     song_collection: Song_Collection = Relationship(back_populates="songs")
 
+
+SQLModel.metadata.create_all(ENGINE)
+print("Database Created")
+
 def main():
     print("Database stuff")
-    SQLModel.metadata.create_all(engine)
-    print("Database Created")
-
+    
 
 
 if __name__ == "__main__":
