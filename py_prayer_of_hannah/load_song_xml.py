@@ -1,5 +1,6 @@
 import xmltodict # type: ignore
 import os 
+import db
 
 PATH_TO_XML = 'resources'
 
