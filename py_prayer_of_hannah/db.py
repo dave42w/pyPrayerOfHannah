@@ -1,7 +1,14 @@
+import os
 from sqlmodel import SQLModel, Field, create_engine, Session, Relationship, select
 from sqlmodel._compat import SQLModelConfig
 from sqlalchemy import Column, String, event
 #from pydantic import EmailStr
+
+ECHO_SQL = True
+
+# Create an ENGINE (connection to the database)
+ENGINE = create_engine('sqlite:///PrayerOfHannah.sqlite', echo=ECHO_SQL)
+print("Database Engine Connected")
 
 class SQLModelValidation(SQLModel):
     """
@@ -80,9 +87,11 @@ SQLModel.metadata.create_all(ENGINE)
 print("Database Created")
 
 def main():
-    print("Database stuff")
-    
+    print("Delete database")
+    os.remove("PrayerOfHannah.sqlite")
 
+    print("Create Database")
+    SQLModel.metadata.create_all(ENGINE)
 
 if __name__ == "__main__":
     main()
