@@ -1,4 +1,4 @@
-from pyPrayerOfHannah.db import DB, Author, Song_Book
+from pyPrayerOfHannah.dbms import Dbms, Author, Song_Book
 from sqlmodel import SQLModel, Field, create_engine, Session, Relationship, select
 from sqlmodel._compat import SQLModelConfig
 from sqlalchemy import Column, String, Index, engine
@@ -6,19 +6,19 @@ from sqlalchemy import Column, String, Index, engine
 import pathlib as pl
 
 def test_delete_database_test() -> None:
-    d = DB()
-    d.delete_database()
-    p: pl.Path = pl.Path(d.DATABASE_FILE)
+    db = Dbms()
+    db.delete_database()
+    p: pl.Path = pl.Path(db.DATABASE_FILE)
     if p.resolve().is_file():
         raise AssertionError(f"Database File hasn't been deleted: {str(p)}")
 
 def test_add_author() -> None:
-    d = DB()
-    d.delete_database()
-    d.create_database_structure()
-    d.get_session()
+    db = Dbms(True)
+    db.delete_database()
+    db.create_database_structure()
+    db.get_session()
 
-    with Session(d.engine) as session:
+    with Session(db.engine) as session:
 
         row: Author = Author(surname="Wesley", firstnames="John")
         session.add(row)
@@ -33,12 +33,13 @@ def test_add_author() -> None:
         assert row.display_name == "Wesley, John", f"Add author displayname should be 'Wesley, John': {row.display_name}"
 
 def test_add_song_book() -> None:
-    d = DB()
-    d.delete_database()
-    d.create_database_structure()
-    d.get_session()
+    db = Dbms(True)
 
-    with Session(d.engine) as session:
+    db.delete_database()
+    db.create_database_structure()
+    db.get_session()
+
+    with Session(db.engine) as session:
 
         row: Song_Book = Song_Book(code="StF", name="Singing the Faith", url="methodist.org")
         session.add(row)

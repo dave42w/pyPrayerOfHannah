@@ -13,29 +13,38 @@ class VerseType(StrEnum):
     CHORUS = 'c'
     BRIDGE = 'b'
 
-class DB:
+class Dbms:
     DATABASE_FILE = 'PrayerOfHannah.sqlite'
     DATABASE_URL = 'sqlite:///' + DATABASE_FILE
 
     # controls if the sql is logged
     ECHO_SQL = False
 
-    def __init__(self) -> None:
-        print("Creating DB Engine")
-        self.engine: engine.Engine = create_engine(self.DATABASE_URL, echo=self.ECHO_SQL)
-        print("Database Engine Connected")
+    def __init__(self, in_memory: bool = False) -> None:
+        self.in_memory = in_memory
+        if self.in_memory:
+            print("Creating memory DB Engine")
+            self.engine: engine.Engine = create_engine("sqlite://", echo=self.ECHO_SQL)
+            print("Database Memory Engine Connected")
+        else:
+            print("Creating file DB Engine")
+            self.engine: engine.Engine = create_engine(self.DATABASE_URL, echo=self.ECHO_SQL)
+            print("Database Engine Connected")
 
     def create_database_structure(self) -> None:
         print("Creating Database Structure")
         SQLModel.metadata.create_all(self.engine)
 
     def delete_database(self) -> None:
-        path: pl.Path = pl.Path(self.DATABASE_FILE)
-        if pl.Path(path).resolve().is_file():
-            print("Delete database to start fresh")
-            os.remove(self.DATABASE_FILE)
+        if self.in_memory:
+            print("In memory DB Engine so not deleted")
         else:
-            print("No database to delete")
+            path: pl.Path = pl.Path(self.DATABASE_FILE)
+            if pl.Path(path).resolve().is_file():
+                print("Delete database to start fresh")
+                os.remove(self.DATABASE_FILE)
+            else:
+                print("No database to delete")
 
     #Maybe clean up with a dependency like:
     def get_session(self):
@@ -341,7 +350,7 @@ class Verse(SQLModelValidation, table=True):
 
 def main() -> None:
     # Create a DB Instance
-    db = DB()
+    db = Dbms()
 
     db.delete_database()
     db.create_database_structure()
