@@ -6,6 +6,7 @@ from pydantic import computed_field
 from enum import StrEnum
 from sqlalchemy.event import listen
 from sqlalchemy.pool import Pool
+import pathlib as pl
 
 class VerseType(StrEnum):
     VERSE = 'v'
@@ -29,8 +30,12 @@ class DB:
         SQLModel.metadata.create_all(self.engine)
 
     def delete_database(self) -> None:
-        print("Delete database to start fresh")
-        os.remove(self.DATABASE_FILE)
+        path: pl.Path = pl.Path(self.DATABASE_FILE)
+        if pl.Path(path).resolve().is_file():
+            print("Delete database to start fresh")
+            os.remove(self.DATABASE_FILE)
+        else:
+            print("No database to delete")
 
     #Maybe clean up with a dependency like:
     def get_session(self):

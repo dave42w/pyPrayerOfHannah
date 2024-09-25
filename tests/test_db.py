@@ -1,6 +1,7 @@
-from py_prayer_of_hannah.db import DB
+from src.pyPrayerOfHannah.db import DB
 import pathlib as pl
 
+print("hello test")
 
 def delete_database_test() -> None:
     db = DB()
