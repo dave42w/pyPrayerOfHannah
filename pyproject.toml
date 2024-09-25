@@ -1,5 +1,5 @@
 [project]
-name = "pyPrayerOfHannah"
+name = "py_prayer_of_hannah"
 version = "0.1.0"
 description = "Worship Slides"
 readme = "README.md"
@@ -9,4 +9,9 @@ dependencies = [
     "python-fasthtml>=0.6.6",
     "sqlmodel>=0.0.22",
     "xmltodict>=0.13.0",
+]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
 ]
