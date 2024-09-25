@@ -1,7 +1,7 @@
-#from src.pyPrayerOfHannah.db import DB
-#mport pathlib as pl
+#from pyPrayerOfHannah import db
+import pathlib as pl
 
-print("hello test")
+print("hello my test")
 
 def delete_database_test() -> None:
     raise AssertionError(f"Database File hasn't been deleted: {str(path)}")
