@@ -1,9 +1,11 @@
 import xmltodict # type: ignore
-import os 
-import pyPrayerOfHannah.db as db
-from sqlmodel import Session
+import os
+from dbms import Dbms
+from sqlmodel import Session, select
+from models import VerseType, Author, Song_Book, Song, Song_Book_Item, Verse
 
-PATH_TO_XML = 'resources'
+#PATH_TO_XML = 'resources'
+PATH_TO_XML = 'xml'
 
 def get_list_items(list_items) -> list:
     result: list = []
@@ -48,7 +50,7 @@ def get_song_books(xml_dict) -> list:
                 result.append(sb)
             else:
                 result = [sb]
-                
+
     return result
 
 def get_verses(xml_dict) -> list:
@@ -80,21 +82,51 @@ def get_verses(xml_dict) -> list:
                 result.append(verse)
             else:
                 result = [verse]
-                
+
     return result
 
-def save_authors(session: Session, authors: list) -> None:
+def save_authors(session: Session, authors: list) -> list:
+        result = []
         for author in authors:
             names: list = author.split()
-            n: str = names[-1] + ','
-            for na in names[0:-1]:
-                n = n + ' ' + na
-                a = db.Author(name=n)
-            session.add(a)
-            print(f'Saving author:{a}')
+            sn: str = names[-1].strip()
+            fn: str = ''
+            for n in names[0:-1]:
+                if len(fn) >= 1:
+                    fn = ' ' + n
+                else:
+                    fn = n
+            fn = fn.strip()
+            author_check: Author | None = session.exec(select(Author).where(Author.surname == sn).where(Author.first_names == fn)).first()
+            if author_check is None:
+                a: Author = Author(surname=sn, first_names=fn)
 
+                session.add(a)
+                result.append(a)
+                #print(f'Saving author:{a}')
+            else:
+                pass
+                #print(f'NOT Saving author:{fn} {sn}')
+        return result
+
+def save_songs(session: Session, titles: list, authors: list) -> Song:
+    song_check: Song | None = session.exec(select(Song).where(Song.title == titles[0])).first()
+    if song_check is None:
+        song: Song = Song(title=titles[0], authors=authors)
+
+        session.add(song)
+        return Song
+        #print(f'Saving song:{song}')
+    else:
+        print(f'NOT Saving song:{titles[0]} {authors}')
+        return song_check
+
+#def save_song_books(session, song_books, verse_code)
 
 def main() -> None:
+    db = Dbms()
+    db.create_database_structure()
+
     # Scan the directory and get
     # an iterator of os.DirEntry objects
     # corresponding to entries in it
@@ -107,33 +139,36 @@ def main() -> None:
     for file in obj:
         if file.is_file():
             file_number += 1
-            print(f'{file_number}', end='')
-            
+            #print(f'{file_number}', end='')
+
             with open(PATH_TO_XML+'/'+file.name) as f:
                 xml_string = f.read()
-            
+
                 xml_dict = xmltodict.parse(xml_string)
 
                 titles: list = get_titles(xml_dict)
-                print(f'{titles}', end='')
+                #print(f'{titles}', end='')
 
-                verse_order: str = get_verse_order(xml_dict) 
-                print(f'#{verse_order}', end='')
+                verse_order: str = get_verse_order(xml_dict)
+                #print(f'#{verse_order}', end='')
 
                 authors: list = get_authors(xml_dict)
-                print(f'#{authors}', end='')
+                #print(f'#{authors}', end='')
 
                 song_books: list = get_song_books(xml_dict)
-                print(f'#{song_books}', end='')
-                print('')
+                #print(f'#{song_books}', end='')
+                #print('')
 
                 verses: list = get_verses(xml_dict)
-                print(f'#{verses}')
+                #print(f'#{verses}')
 
-                with Session(db.ENGINE) as session:
-                    save_authors(session, authors)
-                    save_song_books(session, song_books)
-                    save_songs(sess)
+                with Session(db.engine) as session:
+                    model_authors: list = save_authors(session, authors)
+                    song: Song = save_song(session, titles, model_authors)
+                    #song_book_item: Song_Book_Item = save_song_books(session, song, song_books, verse_order)
+                    #save_verses(session, song_book_item, verses)
+                    #save_songs(sess)
+                    session.commit()
 
     print("end")
 

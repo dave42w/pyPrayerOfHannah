@@ -102,7 +102,7 @@ class Author(SQLModelValidation, table=True):
     surname: str = Field(
         description="Author surname eg 'Wesley'",
         sa_column=Column("surname", String(50), nullable=False),
-        min_length=3,
+        min_length=1,
         max_length=50,
     )
 
@@ -197,9 +197,9 @@ class Song(SQLModelValidation, table=True):
 
     title: str = Field(
         description="Song title eg Be Thou My Vision",
-        sa_column=Column("title", String(50), index=True, unique=True, nullable=False),
+        sa_column=Column("title", String(100), index=True, unique=True, nullable=False),
         min_length=5,
-        max_length=50,
+        max_length=100,
     )
 
     # M:M relationship with Author via keys only link
