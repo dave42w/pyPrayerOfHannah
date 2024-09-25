@@ -28,7 +28,7 @@ class Dbms:
             print("Database Memory Engine Connected")
         else:
             print("Creating file DB Engine")
-            self.engine: engine.Engine = create_engine(self.DATABASE_URL, echo=self.ECHO_SQL)
+            self.engine = create_engine(self.DATABASE_URL, echo=self.ECHO_SQL)
             print("Database Engine Connected")
 
     def create_database_structure(self) -> None:
@@ -45,11 +45,6 @@ class Dbms:
                 os.remove(self.DATABASE_FILE)
             else:
                 print("No database to delete")
-
-    #Maybe clean up with a dependency like:
-    def get_session(self):
-        with Session(self.engine) as session:
-            yield session
 
 class SQLModelValidation(SQLModel):
     """
@@ -141,7 +136,7 @@ class Author(SQLModelValidation, table=True):
         Primary Key, autoincremented
     surname : str
         Surname of the Author
-    firstnames : str
+    first_names : str
         All First names and initials of the Author
     songs : list[songs]
         All the songs by this author
@@ -156,9 +151,9 @@ class Author(SQLModelValidation, table=True):
         max_length=50,
     )
 
-    firstnames: str = Field(
-        description="Author firstnames eg 'John Fred' or 'John F'",
-        sa_column=Column("firstnames", String(50), nullable=False),
+    first_names: str = Field(
+        description="Author first names eg 'John Fred' or 'John F'",
+        sa_column=Column("first_names", String(50), nullable=False),
         min_length=0, 
         max_length=50,
     )
@@ -168,9 +163,9 @@ class Author(SQLModelValidation, table=True):
 
     __table_args__ = (
         Index(
-            "compound_index_author_surname_firstnames",
+            "compound_index_author_surname_first_names",
             "surname",
-            "firstnames",
+            "first_names",
             unique=True,
         ),
     )
@@ -178,7 +173,7 @@ class Author(SQLModelValidation, table=True):
     @computed_field # type: ignore[prop-decorator]
     @property
     def display_name(self) -> str:
-        return (f"{self.surname}, {self.firstnames}")
+        return (f"{self.surname}, {self.first_names}")
 
 
 class Song_Book(SQLModel, table=True):
@@ -354,13 +349,12 @@ def main() -> None:
 
     db.delete_database()
     db.create_database_structure()
-    db.get_session()
 
     # Adding sample data
     with Session(db.engine) as session:
 
-        a_wesley_john: Author = Author(surname="Wesley", firstnames="John")
-        a_wesley_charles: Author = Author(surname="Wesley", firstnames="Charles")
+        a_wesley_john: Author = Author(surname="Wesley", first_names="John")
+        a_wesley_charles: Author = Author(surname="Wesley", first_names="Charles")
 
         sb_HP: Song_Book = Song_Book(code="H&P", name="Hymns and Psalms")
         sb_StF: Song_Book = Song_Book(code="StF", name="Singing the Faith", url="methodist.org")
