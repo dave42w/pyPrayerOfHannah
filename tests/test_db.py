@@ -7,13 +7,13 @@ from typing import Sequence
 @pytest.fixture
 def db() -> Dbms:
     dbase = Dbms(True)
-    dbase.delete_database()
+    dbase.delete_database_file()
     dbase.create_database_structure()
     return dbase
 
 def test_delete_database_test() -> None:
     db = Dbms()
-    db.delete_database()
+    db.delete_database_file()
     p: pl.Path = pl.Path(db.DATABASE_FILE)
     if p.resolve().is_file():
         raise AssertionError(f"Database File hasn't been deleted: {str(p)}")
