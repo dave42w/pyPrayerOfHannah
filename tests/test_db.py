@@ -25,17 +25,12 @@ def test_add_author() -> None:
 
         session.commit()
 
-        if row.id != 1: 
-            raise AssertionError(f"Add id should be 1: {row.id}")
+        assert row.id is not None, "Row should exist after add"
+        assert row.id == 1, f"Add id should be 1: {row.id}"
 
-        if row.surname != "Wesley": 
-            raise AssertionError(f"Add author surname should be 'Wesley': {row.surname}")
-
-        if row.firstnames != "John": 
-            raise AssertionError(f"Add author firstnames should be 'John': {row.firstnames}")
-
-        if row.display_name != "Wesley, John": 
-            raise AssertionError(f"Add author displayname should be 'Wesley, John': {row.display_name}")
+        assert row.surname == "Wesley", f"Add author surname should be 'Wesley': {row.surname}"
+        assert row.firstnames == "John", f"Add author firstnames should be 'John': {row.firstnames}"
+        assert row.display_name == "Wesley, John", f"Add author displayname should be 'Wesley, John': {row.display_name}"
 
 def test_add_song_book() -> None:
     d = DB()
@@ -50,14 +45,8 @@ def test_add_song_book() -> None:
 
         session.commit()
 
-        if row.id != 1: 
-            raise AssertionError(f"Add id should be 1: {row.id}")
-
-        if row.code != "StF": 
-            raise AssertionError(f"Add code should be 'StF': {row.code}")
-
-        if row.name != "Singing the Faith": 
-            raise AssertionError(f"Add name should be 'Singing the Faith': {row.name}")
-
-        if row.url != "methodist.org": 
-            raise AssertionError(f"Add url should be 'methodist.org': {row.url}")
+        assert row.id is not None, "Row should exist after add"
+        assert row.id == 1, f"Add id should be 1: {row.id}"
+        assert row.code == "StF", f"Add code should be 'StF': {row.code}"
+        assert row.name == "Singing the Faith", "Add name should be 'Singing the Faith': {row.name}"
+        assert row.url == "methodist.org", f"Add url should be 'methodist.org': {row.url}"
