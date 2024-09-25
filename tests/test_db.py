@@ -1,4 +1,5 @@
-from pyPrayerOfHannah.dbms import Dbms, VerseType, Author, Song_Book, Song, Song_Book_Item, Verse
+from pyPrayerOfHannah.dbms import Dbms
+from pyPrayerOfHannah.models import VerseType, Author, Song_Book, Song, Song_Book_Item, Verse
 from sqlmodel import Session, select
 import pytest
 import pathlib as pl
