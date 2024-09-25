@@ -1,4 +1,4 @@
-from pyPrayerOfHannah.dbms import Dbms, Author, Song_Book, Song, Song_Book_Item, Verse
+from pyPrayerOfHannah.dbms import Dbms, VerseType, Author, Song_Book, Song, Song_Book_Item, Verse
 from sqlmodel import Session, select
 import pytest
 import pathlib as pl
@@ -88,7 +88,7 @@ def test_song_book(db) -> None:
         assert row.name == "Singing the Faith", "Add name should be 'Singing the Faith': {row.name}"
         assert row.url == "methodist.org", f"Add url should be 'methodist.org': {row.url}"
 
-'''
+
 def test_song(db) -> None:
     with Session(db.engine) as session:
         author: Author = Author(surname="Wesley", first_names="John")
@@ -98,64 +98,68 @@ def test_song(db) -> None:
 
         song_book_item: Song_Book_Item = Song_Book_Item(song_book=song_book, song=song, nbr=345, verse_order="v1 c1 b1 v2 v3")
 
-        lyrics1: str = "And can it be that I should gain<br>"\
+        lyrics1: str = "v1: And can it be that I should gain<br>"\
                        "an interest in the Saviour's blood?<br>"\
                        "Died he for me, who caused his pain?<br>"\
                        "For me, who him to death pursued?<br>"\
                        "Amazing love! How can it be<br>"\
                        "that thou, my God, shouldst die for me?<br>"
 
-        lyrics2: str = "'Tis mystery all:the Immortal dies!<br>"\
+        lyrics2: str = "c1: 'Tis mystery all:the Immortal dies!<br>"\
                        "Who can explore his strange design?<br>"\
                        "In vain the first-born seraph tries<br>"\
                        "to sound the depths of love divine.<br>"\
                        "'Tis mercy all! Let earth adore,<br>"\
                        "let angel minds enquire no more.<br>"
 
-        lyrics3: str = "He left his Father's throne above --<br>"\
+        lyrics3: str = "b1: He left his Father's throne above --<br>"\
                        "so free, so infinite his grace --<br>"\
                        "emptied himself of all but love,<br>"\
                        "and bled for Adam's helpless race.<br>"\
                        "'Tis mercy all, immense and free;<br>"\
                        "for, O my God, it found out me!<br>"
 
-        lyrics4: str = "Long my imprisoned spirit lay<br>"\
+        lyrics4: str = "v2: Long my imprisoned spirit lay<br>"\
                        "fast bound in sin and nature's night;<br>"\
                        "thine eye diffused a quickening ray --<br>"\
                        "I woke, the dungeon flamed with light,<br>"\
                        "my chains fell off, my heart was free,<br>"\
                        "I rose, went forth, and followed thee.<br>"
 
-        lyrics5: str = "No condemnation now I dread;<br>"\
+        lyrics5: str = "v3: No condemnation now I dread;<br>"\
                        "Jesus, and all in him, is mine!<br>"\
                        "Alive in him, my living Head,<br>"\
                        "and clothed in righteousness divine,<br>"\
                        "bold I approach the eternal throne,<br>"\
                        "and claim the crown, through Christ, my own.<br>"
 
-        v1: Verse = Verse(type=VerseType.VERSE,  number=1, lyrics="My first verse", song_book_item=song_book_item)
-        v2: Verse = Verse(type=VerseType.CHORUS, number=1, lyrics="My second verse", song_book_item=song_book_item)
-        v3: Verse = Verse(type=VerseType.BRIDGE, number=1, lyrics="a bridge", song_book_item=song_book_item)
-        v4: Verse = Verse(type=VerseType.VERSE,  number=2, lyrics="a chorus", song_book_item=song_book_item)
-        v4: Verse = Verse(type=VerseType.VERSE,  number=3, lyrics="a chorus", song_book_item=song_book_item)
+        v1: Verse = Verse(type=VerseType.VERSE,  number=1, lyrics=lyrics1, song_book_item=song_book_item)
+        v2: Verse = Verse(type=VerseType.CHORUS, number=1, lyrics=lyrics2, song_book_item=song_book_item)
+        v3: Verse = Verse(type=VerseType.BRIDGE, number=1, lyrics=lyrics3, song_book_item=song_book_item)
+        v4: Verse = Verse(type=VerseType.VERSE,  number=2, lyrics=lyrics4, song_book_item=song_book_item)
+        v5: Verse = Verse(type=VerseType.VERSE,  number=3, lyrics=lyrics5, song_book_item=song_book_item)
 
-        session.add(a_wesley_john)
-        session.add(a_wesley_charles)
+        session.add(author)
 
-        session.add(sb_HP)
-        session.add(sb_StF)
+        session.add(song_book)
 
-        session.add(s_and)
-        session.add(s_oh)
+        session.add(song)
 
-        session.add(sbi1)
-        session.add(sbi2)
-        session.add(sbi3)
+        session.add(song_book_item)
 
         session.add(v1)
         session.add(v2)
         session.add(v3)
         session.add(v4)
+        session.add(v5)
 
         session.commit()
-'''
+
+    with Session(db.engine) as session:
+        vc1: Verse | None = session.get(Verse, 1)
+        assert vc1 is not None, "Get verse id 1 failed"
+        assert isinstance(vc1, Verse), "Get verse id 1 didn't return a verse"
+        if isinstance(vc1, Verse):
+            assert vc1.type == VerseType.VERSE, f"Verse 1 type is incorrect: {vc1.type}"
+            assert vc1.number == 1, f"Verse 1 number is incorrect: {vc1.number}"
+            assert vc1.lyrics == lyrics1, f"Verse 1 lyrics incorrect: {vc1.lyrics}"
