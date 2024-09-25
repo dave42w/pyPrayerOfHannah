@@ -1,12 +1,11 @@
-from pyPrayerOfHannah.dbms import Dbms, Author, Song_Book
-from sqlmodel import SQLModel, Field, create_engine, Session, Relationship, select, Sequence
-from sqlmodel._compat import SQLModelConfig
-from sqlalchemy import Column, String, Index, engine
+from pyPrayerOfHannah.dbms import Dbms, Author, Song_Book, Song, Song_Book_Item, Verse
+from sqlmodel import Session, select
 import pytest
 import pathlib as pl
+from typing import Sequence
 
-@pytest.fixture  
-def db() -> Dbms:  
+@pytest.fixture
+def db() -> Dbms:
     dbase = Dbms(True)
     dbase.delete_database()
     dbase.create_database_structure()
@@ -26,7 +25,7 @@ def test_author(db: Dbms) -> None:
         row1_check: Author = Author(surname="Wesley", first_names="John")
         row2: Author = Author(surname="Dobson", first_names="Marjorie")
         row2_check: Author = Author(surname="Dobson", first_names="Marjorie")
-        
+
         session.add(row1)
         session.add(row2)
 
@@ -47,7 +46,7 @@ def test_author(db: Dbms) -> None:
         assert row2.display_name == row2_check.display_name, f"Author.displayname should be '{row2_check.display_name}' is '{row2.surname}'"
 
     with Session(db.engine) as session:
-        results = session.exec(select(Author).order_by(Author.surname, Author.first_names)).all()
+        results: Sequence[Author] = session.exec(select(Author).order_by(Author.surname, Author.first_names)).all()
         assert len(results) == 2, f"Should be 2 Rows is {len(results)}"
         r0: Author = results[0]
         r1: Author = results[1]
@@ -74,9 +73,8 @@ def test_author(db: Dbms) -> None:
         a3: Author | None = session.get(Author, 1)
         assert a3 is None, "Updated Author.surname should have been deleted"
 
-        
 
-def test_add_song_book(db) -> None:
+def test_song_book(db) -> None:
     with Session(db.engine) as session:
 
         row: Song_Book = Song_Book(code="StF", name="Singing the Faith", url="methodist.org")
@@ -89,3 +87,75 @@ def test_add_song_book(db) -> None:
         assert row.code == "StF", f"Add code should be 'StF': {row.code}"
         assert row.name == "Singing the Faith", "Add name should be 'Singing the Faith': {row.name}"
         assert row.url == "methodist.org", f"Add url should be 'methodist.org': {row.url}"
+
+'''
+def test_song(db) -> None:
+    with Session(db.engine) as session:
+        author: Author = Author(surname="Wesley", first_names="John")
+        song_book: Song_Book = Song_Book(code="StF", name="Singing the Faith", url="methodist.org")
+
+        song: Song = Song(title="And Can it be",  authors=[author])
+
+        song_book_item: Song_Book_Item = Song_Book_Item(song_book=song_book, song=song, nbr=345, verse_order="v1 c1 b1 v2 v3")
+
+        lyrics1: str = "And can it be that I should gain<br>"\
+                       "an interest in the Saviour's blood?<br>"\
+                       "Died he for me, who caused his pain?<br>"\
+                       "For me, who him to death pursued?<br>"\
+                       "Amazing love! How can it be<br>"\
+                       "that thou, my God, shouldst die for me?<br>"
+
+        lyrics2: str = "'Tis mystery all:the Immortal dies!<br>"\
+                       "Who can explore his strange design?<br>"\
+                       "In vain the first-born seraph tries<br>"\
+                       "to sound the depths of love divine.<br>"\
+                       "'Tis mercy all! Let earth adore,<br>"\
+                       "let angel minds enquire no more.<br>"
+
+        lyrics3: str = "He left his Father's throne above --<br>"\
+                       "so free, so infinite his grace --<br>"\
+                       "emptied himself of all but love,<br>"\
+                       "and bled for Adam's helpless race.<br>"\
+                       "'Tis mercy all, immense and free;<br>"\
+                       "for, O my God, it found out me!<br>"
+
+        lyrics4: str = "Long my imprisoned spirit lay<br>"\
+                       "fast bound in sin and nature's night;<br>"\
+                       "thine eye diffused a quickening ray --<br>"\
+                       "I woke, the dungeon flamed with light,<br>"\
+                       "my chains fell off, my heart was free,<br>"\
+                       "I rose, went forth, and followed thee.<br>"
+
+        lyrics5: str = "No condemnation now I dread;<br>"\
+                       "Jesus, and all in him, is mine!<br>"\
+                       "Alive in him, my living Head,<br>"\
+                       "and clothed in righteousness divine,<br>"\
+                       "bold I approach the eternal throne,<br>"\
+                       "and claim the crown, through Christ, my own.<br>"
+
+        v1: Verse = Verse(type=VerseType.VERSE,  number=1, lyrics="My first verse", song_book_item=song_book_item)
+        v2: Verse = Verse(type=VerseType.CHORUS, number=1, lyrics="My second verse", song_book_item=song_book_item)
+        v3: Verse = Verse(type=VerseType.BRIDGE, number=1, lyrics="a bridge", song_book_item=song_book_item)
+        v4: Verse = Verse(type=VerseType.VERSE,  number=2, lyrics="a chorus", song_book_item=song_book_item)
+        v4: Verse = Verse(type=VerseType.VERSE,  number=3, lyrics="a chorus", song_book_item=song_book_item)
+
+        session.add(a_wesley_john)
+        session.add(a_wesley_charles)
+
+        session.add(sb_HP)
+        session.add(sb_StF)
+
+        session.add(s_and)
+        session.add(s_oh)
+
+        session.add(sbi1)
+        session.add(sbi2)
+        session.add(sbi3)
+
+        session.add(v1)
+        session.add(v2)
+        session.add(v3)
+        session.add(v4)
+
+        session.commit()
+'''
