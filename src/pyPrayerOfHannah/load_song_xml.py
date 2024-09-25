@@ -1,6 +1,6 @@
 import xmltodict # type: ignore
 import os 
-import db
+import pyPrayerOfHannah.db as db
 from sqlmodel import Session
 
 PATH_TO_XML = 'resources'
