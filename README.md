@@ -6,7 +6,7 @@ Named in honour of Hannah (see 1 Samuel 2:1-10) and particularly from verse 8:
 "He raises up the poor from the dust;
 he lifts the needy from the ash heap"
 
-pyPrayerOfHannah is a python replacement for the original project PrayertOfHannah which I started using Rust. Switching to Python in part duie to the quality of the SQL ecosystem in Rust.
+pyPrayerOfHannah is a replacement (written in Python) for the original project PrayertOfHannah which I started using Rust. I've switched to Python in part due to my feelings about the quality of the SQL ecosystem in Rust.
 
 ## Purpose
 
