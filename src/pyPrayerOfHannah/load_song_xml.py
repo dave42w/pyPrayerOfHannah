@@ -2,7 +2,7 @@ import xmltodict # type: ignore
 import os
 from dbms import Dbms
 from sqlmodel import Session, select
-from models import VerseType, Author, Song_Book, Song, Song_Book_Item, Verse
+from models import Author, Song_Book, Song, Song_Book_Item, Verse
 
 #PATH_TO_XML = 'resources'
 PATH_TO_XML = 'xml'
@@ -151,7 +151,6 @@ def save_song_book_item(session: Session, titles: list, song_books: list, verse_
 def save_verses(session: Session, titles: list, song_books: list, verses: list) -> None:
     for sb in song_books:
         sb_bk = sb[0].strip()
-        sb_nbr = sb[1].strip()
         song_book: Song_Book | None = session.exec(select(Song_Book).where(Song_Book.code == sb_bk)).first()
         if song_book is not None:
 
