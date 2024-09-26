@@ -109,19 +109,83 @@ def save_authors(session: Session, authors: list) -> list:
                 #print(f'NOT Saving author:{fn} {sn}')
         return result
 
-def save_songs(session: Session, titles: list, authors: list) -> Song:
+def save_song(session: Session, titles: list, authors: list) -> Song:
     song_check: Song | None = session.exec(select(Song).where(Song.title == titles[0])).first()
     if song_check is None:
         song: Song = Song(title=titles[0], authors=authors)
 
         session.add(song)
         return Song
-        #print(f'Saving song:{song}')
     else:
-        print(f'NOT Saving song:{titles[0]} {authors}')
-        return song_check
+        print(f'Duplicate so NOT Saving song:{titles[0]}')
+        return None
 
-#def save_song_books(session, song_books, verse_code)
+def save_song_books(session: Session, song_books: list) -> None:
+    for sb in song_books:
+        sb_bk = sb[0].strip()
+        song_book_check: Song_Book | None = session.exec(select(Song_Book).where(Song_Book.code == sb_bk)).first()
+        if song_book_check is None:
+            song_book: Song_Book = Song_Book(code=sb_bk, name=sb_bk)
+            session.add(song_book)
+
+def save_song_book_item(session: Session, titles: list, song_books: list, verse_code: str) -> None:
+    for sb in song_books:
+        sb_bk = sb[0].strip()
+        sb_nbr = sb[1].strip()
+        song_book: Song_Book | None = session.exec(select(Song_Book).where(Song_Book.code == sb_bk)).first()
+        if song_book is not None:
+
+            song: Song | None = session.exec(select(Song).where(Song.title == titles[0])).first()
+            if song is not None:
+
+                statement = select(Song_Book_Item).where(Song_Book_Item.song_book == song_book).where(Song_Book_Item.song == song)
+                song_book_item_check: Song_Book_Item | None = session.exec(statement).first()
+                if song_book_item_check is None:
+                    if sb_nbr == "None":
+                        song_book_item: Song_Book_Item = Song_Book_Item(song_book=song_book, song=song, verse_order = verse_code)
+                        session.add(song_book_item)
+                    else:
+                        song_book_item = Song_Book_Item(song_book=song_book, song=song, nbr=sb_nbr, verse_order = verse_code)
+                        session.add(song_book_item)
+
+def save_verses(session: Session, titles: list, song_books: list, verses: list) -> None:
+    for sb in song_books:
+        sb_bk = sb[0].strip()
+        sb_nbr = sb[1].strip()
+        song_book: Song_Book | None = session.exec(select(Song_Book).where(Song_Book.code == sb_bk)).first()
+        if song_book is not None:
+
+            song: Song | None = session.exec(select(Song).where(Song.title == titles[0])).first()
+            if song is not None:
+
+                statement = select(Song_Book_Item).where(Song_Book_Item.song_book == song_book).where(Song_Book_Item.song == song)
+                song_book_item_check: Song_Book_Item | None = session.exec(statement).first()
+                if song_book_item_check is not None:
+                    for verse in verses:
+                        vn: str = verse[0]
+                        lyric: str = verse[1]
+
+                        vt: str = vn[0]
+                        if vt != "o":
+                            if vt not in "vcbe":
+                                print(f"Invalid Verse type for Song: {song}")
+
+                            nbr: int = int(vn[1])
+
+                            lines: list = lyric.split("\n")
+                            br_lyric: str = ''
+                            for li in lines:
+                                if len(br_lyric) >= 1:
+                                    br_lyric = br_lyric + "<br>" + li
+                                else:
+                                    br_lyric = li
+
+                            verse_check: Verse | None = session.exec(select(Verse).where(Verse.song_book_item == song_book_item_check)).first()
+
+                            if verse_check is None:
+                                v: Verse = Verse(song_book_item=song_book_item_check, type=vt, number=nbr, lyrics=br_lyric)
+                                session.add(v)
+
 
 def main() -> None:
     db = Dbms()
@@ -164,10 +228,16 @@ def main() -> None:
 
                 with Session(db.engine) as session:
                     model_authors: list = save_authors(session, authors)
-                    song: Song = save_song(session, titles, model_authors)
-                    #song_book_item: Song_Book_Item = save_song_books(session, song, song_books, verse_order)
-                    #save_verses(session, song_book_item, verses)
-                    #save_songs(sess)
+                    save_song(session, titles, model_authors)
+                    save_song_books(session, song_books)
+                    session.commit()
+
+                with Session(db.engine) as session:
+                    save_song_book_item(session, titles, song_books, verse_order)
+                    session.commit()
+
+                with Session(db.engine) as session:
+                    save_verses(session, titles, song_books, verses)
                     session.commit()
 
     print("end")

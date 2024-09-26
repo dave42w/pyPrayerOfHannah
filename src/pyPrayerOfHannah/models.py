@@ -8,7 +8,7 @@ class VerseType(StrEnum):
     VERSE = 'v'
     CHORUS = 'c'
     BRIDGE = 'b'
-
+    ENDING = 'e'
 
 class SQLModelValidation(SQLModel):
     """
@@ -230,12 +230,12 @@ class Song_Book_Item(SQLModelValidation, table=True):
     id: int | None = Field(default=None, primary_key=True)
     song_book_id: int = Field(foreign_key="song_book.id")
     song_id: int = Field(foreign_key="song.id")
-    nbr: int = Field(description="the Song Nbr in this book", nullable=False, ge=1, le=9999)
+    nbr: int = Field(description="the Song Nbr in this book", nullable=True, ge=1, le=9999)
     verse_order: str = Field(
         description="List of the verses showing the order eg v1 b1 c1 v2 c1 v3 b1 c1",
-        sa_column=Column("verse_order", String(20), nullable=True),
+        sa_column=Column("verse_order", String(50), nullable=True),
         min_length=0,
-        max_length=20,
+        max_length=50,
     )
 
     song_book: "Song_Book" = Relationship(back_populates="songs")
@@ -277,9 +277,9 @@ class Verse(SQLModelValidation, table=True):
     number: int = Field(description="the verse nbr", nullable=False, ge=1, le=10)
     lyrics: str = Field(
         description="markdown lyrics for this verse",
-        sa_column=Column("lyrics", String(1000), nullable=True),
+        sa_column=Column("lyrics", String(3000), nullable=True),
         min_length=0,
-        max_length=1000,
+        max_length=3000,
     )
 
     song_book_item_id: int = Field(foreign_key="song_book_item.id")
