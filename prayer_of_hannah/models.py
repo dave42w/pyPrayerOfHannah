@@ -14,9 +14,9 @@ class SQLModelValidation(SQLModel):
     """
     Helper class to allow for validation in SQLModel classes with table=True
     """
-
     model_config = SQLModelConfig(
-        from_attributes=True, validate_assignment=True
+        from_attributes=True,
+        validate_assignment=True
     )
 
 
@@ -65,7 +65,7 @@ They also have a tune name and a verse count
 
 class Author_Song(SQLModelValidation, table=True):
     """
-    A class to represent the many to many link betweem author and song
+    A class to represent the many to many link between author and song
 
 
     Attributes
@@ -125,7 +125,7 @@ class Author(SQLModelValidation, table=True):
         ),
     )
 
-    @computed_field # type: ignore[prop-decorator]
+    @computed_field
     @property
     def display_name(self) -> str:
         return (f"{self.surname}, {self.first_names}")
@@ -211,7 +211,7 @@ class Song(SQLModelValidation, table=True):
 
 class Song_Book_Item(SQLModelValidation, table=True):
     """
-    A class to represent the many to many link betweem song_book and song
+    A class to represent the many to many link between song_book and song
 
 
     Attributes

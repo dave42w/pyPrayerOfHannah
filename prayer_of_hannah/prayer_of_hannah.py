@@ -1,3 +1,4 @@
+from sqlalchemy import Sequence
 from dbms import Dbms
 from fasthtml import common as fh
 from models import Song_Book
@@ -5,6 +6,7 @@ from sqlmodel import Session, select
 
 db = Dbms()
 db.create_database_structure()
+
 
 
 def song_book_row(sb: Song_Book) -> fh.Div:

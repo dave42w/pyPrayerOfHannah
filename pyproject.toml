@@ -1,20 +1,14 @@
 [project]
-name = "py_prayer_of_hannah"
+name = "prayer_of_hannah"
 version = "0.1.0"
 description = "Worship Slides"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = [
-    "mypy>=1.11.2",
-    "pip-check>=2.9",
-    "pytest-sugar>=1.0.0",
-    "pytest>=8.3.3",
-    "python-fasthtml>=0.6.8",
-    "sqlmodel>=0.0.22",
-    "xmltodict>=0.13.0",
-]
+dependencies = []
+pythonpath = "prayer_of_hannah"
 
 [tool.pytest.ini_options]
+pythonpath = "prayer_of_hannah"
 addopts = [
     "--import-mode=importlib",
 ]
