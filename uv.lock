@@ -253,6 +253,29 @@ wheels = [
 ]
 
 [[package]]
+name = "pip"
+version = "24.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4d/87/fb90046e096a03aeab235e139436b3fe804cdd447ed2093b0d70eba3f7f8/pip-24.2.tar.gz", hash = "sha256:5b5e490b5e9cb275c879595064adce9ebd31b854e3e803740b72f9ccf34a45b8", size = 1922041 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d4/55/90db48d85f7689ec6f81c0db0622d704306c5284850383c090e6c7195a5c/pip-24.2-py3-none-any.whl", hash = "sha256:2cd581cf58ab7fcfca4ce8efa6dcacd0de5bf8d0a3eb9ec927e07405f4d9e2a2", size = 1815170 },
+]
+
+[[package]]
+name = "pip-check"
+version = "2.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "packaging" },
+    { name = "pip" },
+    { name = "terminaltables" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/71/01/f242fc514b3aefc7d09c3814598d816bc6577da4b79e24b6e66254b22b12/pip_check-2.9.tar.gz", hash = "sha256:8e8c849ba306d26837fa0c1a59afc78f4c003e661b1daae0072f58f98dddecd8", size = 6891 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/64/5b/549660844beaa9023d159ed5d71dab00c4f3ac97d9c4bc432c945f633512/pip_check-2.9-py3-none-any.whl", hash = "sha256:6a71cede72081b478edb2a19ce250b2808c55c381c3f796b0827a92cef52efcd", size = 7383 },
+]
+
+[[package]]
 name = "pluggy"
 version = "1.5.0"
 source = { registry = "https://pypi.org/simple" }
@@ -267,6 +290,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "mypy" },
+    { name = "pip-check" },
     { name = "pytest" },
     { name = "pytest-sugar" },
     { name = "python-fasthtml" },
@@ -277,6 +301,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "mypy", specifier = ">=1.11.2" },
+    { name = "pip-check", specifier = ">=2.9" },
     { name = "pytest", specifier = ">=8.3.3" },
     { name = "pytest-sugar", specifier = ">=1.0.0" },
     { name = "python-fasthtml", specifier = ">=0.6.8" },
@@ -531,6 +556,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/10/56/d7d66a84f96d804155f6ff2873d065368b25a07222a6fd51c4f24ef6d764/termcolor-2.4.0.tar.gz", hash = "sha256:aab9e56047c8ac41ed798fa36d892a37aca6b3e9159f3e0c24bc64a9b3ac7b7a", size = 12664 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d9/5f/8c716e47b3a50cbd7c146f45881e11d9414def768b7cd9c5e6650ec2a80a/termcolor-2.4.0-py3-none-any.whl", hash = "sha256:9297c0df9c99445c2412e832e882a7884038a25617c60cea2ad69488d4040d63", size = 7719 },
+]
+
+[[package]]
+name = "terminaltables"
+version = "3.1.10"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f5/fc/0b73d782f5ab7feba8d007573a3773c58255f223c5940a7b7085f02153c3/terminaltables-3.1.10.tar.gz", hash = "sha256:ba6eca5cb5ba02bba4c9f4f985af80c54ec3dccf94cfcd190154386255e47543", size = 12264 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c4/fb/ea621e0a19733e01fe4005d46087d383693c0f4a8f824b47d8d4122c87e0/terminaltables-3.1.10-py2.py3-none-any.whl", hash = "sha256:e4fdc4179c9e4aab5f674d80f09d76fa436b96fdc698a8505e0a36bf0804a874", size = 15155 },
 ]
 
 [[package]]
