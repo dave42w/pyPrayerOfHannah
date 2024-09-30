@@ -4,7 +4,10 @@ version = "0.1.0"
 description = "Worship Slides"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "pytest>=8.3.3",
+    "sqlmodel>=0.0.22",
+]
 pythonpath = "prayer_of_hannah"
 
 [tool.pytest.ini_options]
