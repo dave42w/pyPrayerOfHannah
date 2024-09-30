@@ -5,6 +5,7 @@ description = "Worship Slides"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "flask>=3.0.3",
     "pytest>=8.3.3",
     "sqlmodel>=0.0.22",
 ]
