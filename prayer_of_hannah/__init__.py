@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_admin import Admin
+from flask_admin import Admin, theme
 from flask_admin.contrib.sqla import ModelView
 from config import Config
 
@@ -17,9 +17,10 @@ def create_app(config_class=Config):
     #db.init_app(app)
 
     # Initialize Flask extensions here
-    admin = Admin(app, name='PrayerOfHannah Admin')
-    #admin = Admin(app, name='PrayerOfHannah Admin', theme=Bootstrap4Theme(swatch='cerulean'))
-    # Add administrative views here
+    #admin = Admin(app, name='PrayerOfHannah Admin')
+    #admin = Admin(app, name='PrayerOfHannah Admin', static_url_path='/static', theme=theme.Bootstrap4Theme(swatch='cerulean'))
+    admin = Admin(app, name='PrayerOfHannah Admin', theme=theme.Bootstrap4Theme(swatch='cerulean'))
+
     admin.add_view(ModelView(Author, Session(dbe)))
     admin.add_view(ModelView(Song_Book, Session(dbe)))
 
