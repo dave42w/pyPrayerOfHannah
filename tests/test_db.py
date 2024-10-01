@@ -1,4 +1,8 @@
+#FIXME add hypothesis for testing
+
 from dbms import Dbms
+from config import Config
+
 from models import VerseType, Author, Song_Book, Song, Song_Book_Item, Verse
 from sqlmodel import Session, select
 import pytest
@@ -15,7 +19,14 @@ def db() -> Dbms:
 def test_delete_database_test() -> None:
     db = Dbms()
     db.delete_database_file()
-    p: pl.Path = pl.Path(db.DATABASE_FILE)
+    p: pl.Path = pl.Path(db.SQLALCHEMY_DATABASE_FILE)
+    if p.resolve().is_file():
+        raise AssertionError(f"Database File hasn't been deleted: {str(p)}")
+
+def test_delete_database_test() -> None:
+    db = Dbms()
+    db.delete_database_file()
+    p: pl.Path = pl.Path(Config.SQLALCHEMY_DATABASE_FILE)
     if p.resolve().is_file():
         raise AssertionError(f"Database File hasn't been deleted: {str(p)}")
 

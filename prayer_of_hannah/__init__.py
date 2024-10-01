@@ -1,6 +1,4 @@
 from flask import Flask
-from flask_admin import Admin, theme
-from flask_admin.contrib.sqla import ModelView
 from config import Config
 
 from sqlmodel import Session
@@ -11,18 +9,9 @@ from prayer_of_hannah.models import Author, Song_Book
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
-    db = Dbms()
+    db = Dbms(False, app.config.SQLALCHEMY_DATABASE_URI)
     db.create_database_structure()
-    dbe = db.engine
-    #db.init_app(app)
 
-    # Initialize Flask extensions here
-    #admin = Admin(app, name='PrayerOfHannah Admin')
-    #admin = Admin(app, name='PrayerOfHannah Admin', static_url_path='/static', theme=theme.Bootstrap4Theme(swatch='cerulean'))
-    admin = Admin(app, name='PrayerOfHannah Admin', theme=theme.Bootstrap4Theme(swatch='cerulean'))
-
-    admin.add_view(ModelView(Author, Session(dbe)))
-    admin.add_view(ModelView(Song_Book, Session(dbe)))
 
     # Register blueprints here
     from prayer_of_hannah.main import bp as main_bp

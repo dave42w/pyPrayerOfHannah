@@ -5,14 +5,25 @@ from sqlalchemy.event import listen
 from sqlalchemy.pool import Pool
 import pathlib as pl
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+
+
 class Dbms:
-    DATABASE_FILE = 'PrayerOfHannah.sqlite'
-    DATABASE_URL = 'sqlite:///' + DATABASE_FILE
+    SQLALCHEMY_DATABASE_FILE = os.environ.get('DATABASE_FILE')\
+        or os.path.join(basedir, '../PrayerOfHannah.sqlite')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI')\
+        or 'sqlite:///' + SQLALCHEMY_DATABASE_FILE
 
     # controls if the sql is logged
     ECHO_SQL = False
 
-    def __init__(self, in_memory: bool = False) -> None:
+    def __init__(self, in_memory: bool = False, db_uri: str = '', db_file: str='') -> None:
+        if db_uri:
+            self.SQLALCHEMY_DATABASE_URI = db_uri
+        if db_file:
+            self.SQLALCHEMY_DATABASE_FILE = db_file
+
         self.in_memory = in_memory
         if self.in_memory:
             print("Creating memory DB Engine")
@@ -20,7 +31,7 @@ class Dbms:
             print("Database Memory Engine Connected")
         else:
             print("Creating file DB Engine")
-            self.engine = create_engine(self.DATABASE_URL, echo=self.ECHO_SQL)
+            self.engine = create_engine(self.SQLALCHEMY_DATABASE_URI, echo=self.ECHO_SQL)
             print("Database Engine Connected")
 
     def create_database_structure(self) -> None:
@@ -31,10 +42,10 @@ class Dbms:
         if self.in_memory:
             print("In memory DB Engine so not deleted")
         else:
-            path: pl.Path = pl.Path(self.DATABASE_FILE)
+            path: pl.Path = pl.Path(self.SQLALCHEMY_DATABASE_FILE)
             if pl.Path(path).resolve().is_file():
                 print("Delete database to start fresh")
-                os.remove(self.DATABASE_FILE)
+                os.remove(self.SQLALCHEMY_DATABASE_FILE)
             else:
                 print("No database to delete")
 
