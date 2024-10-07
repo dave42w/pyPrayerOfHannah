@@ -109,13 +109,13 @@ def save_authors(session: Session, authors: list) -> list:
                 #print(f'NOT Saving author:{fn} {sn}')
         return result
 
-def save_song(session: Session, titles: list, authors: list) -> Song:
+def save_song(session: Session, titles: list, authors: list) -> Song | None:
     song_check: Song | None = session.exec(select(Song).where(Song.title == titles[0])).first()
     if song_check is None:
         song: Song = Song(title=titles[0], authors=authors)
 
         session.add(song)
-        return Song
+        return song
     else:
         print(f'Duplicate so NOT Saving song:{titles[0]}')
         return None
