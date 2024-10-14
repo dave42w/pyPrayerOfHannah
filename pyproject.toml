@@ -12,7 +12,7 @@ dependencies = [
     "sqlmodel>=0.0.22",
     "xmltodict>=0.14.1",
 ]
-pythonpath = "prayer_of_hannah"
+#pythonpath = "prayer_of_hannah"
 
 [tool.pytest.ini_options]
 pythonpath = ".;prayer_of_hannah"
