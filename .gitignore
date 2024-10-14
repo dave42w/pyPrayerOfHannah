@@ -169,4 +169,6 @@ xml
 .sesskey
 pyPrayerOfHannah.code-workspace
 .cspell
-pyPrayerOfHannah.code-workspace
+.vscode
+.ruff_cache
+.python-version
