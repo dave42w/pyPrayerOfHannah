@@ -3,19 +3,19 @@ name = "prayer_of_hannah"
 version = "0.1.0"
 description = "Worship Slides"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
     "flask-sqlalchemy>=3.1.1",
     "flask>=3.0.3",
     "pytest-cov>=5.0.0",
     "pytest>=8.3.3",
     "sqlmodel>=0.0.22",
-    "xmltodict>=0.13.0",
+    "xmltodict>=0.14.1",
 ]
 pythonpath = "prayer_of_hannah"
 
 [tool.pytest.ini_options]
-pythonpath = "prayer_of_hannah"
+pythonpath = ".;prayer_of_hannah"
 addopts = [
     "--import-mode=importlib",
 ]
