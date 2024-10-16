@@ -32,7 +32,7 @@ class Dbms:
         else:
             print("Creating file DB Engine")
             self.engine = create_engine(self.SQLALCHEMY_DATABASE_URI, echo=self.ECHO_SQL)
-            print("Database Engine Connected")
+            print(f"Database Engine Connected: {self.SQLALCHEMY_DATABASE_URI}")
 
     def create_database_structure(self) -> None:
         print("Creating Database Structure")

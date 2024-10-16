@@ -1,17 +1,15 @@
 from flask import Flask
 from config import Config
+from sqlalchemy.engine import Engine
 
 from prayer_of_hannah import models
 __all__ = ["models"]
 
-#from sqlmodel import Session
-
 from prayer_of_hannah.dbms import Dbms
-#db = Dbms(False, app.config['SQLALCHEMY_DATABASE_URI'])
-db = Dbms(False)
-db.create_database_structure()
 
-#from prayer_of_hannah.models import Author, Song_Book
+__DB: Dbms | None = None
+__DBE: Engine | None = None
+
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -35,3 +33,18 @@ def create_app(config_class=Config):
     #    return '<h1>Testing the Flask Application Factory Pattern</h1>'
 
     return app
+
+def get_db() -> Dbms:
+    global __DB
+    if __DB is None:
+        __DB = Dbms(False, Config.SQLALCHEMY_DATABASE_URI)
+        __DB.create_database_structure()
+
+    return __DB
+
+def get_dbe() -> Engine:
+    global __DBE
+    if __DBE is None:
+        __DBE = get_db().engine
+
+    return __DBE
