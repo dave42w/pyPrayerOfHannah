@@ -8,6 +8,7 @@ class Config:
 
     SQLALCHEMY_DATABASE_FILE = os.environ.get('DATABASE_FILE')\
         or os.path.join(basedir, 'PrayerOfHannah.sqlite')
+
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI')\
         or 'sqlite:///' + SQLALCHEMY_DATABASE_FILE
 

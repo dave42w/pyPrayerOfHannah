@@ -1,17 +1,21 @@
 from flask import Flask
 from config import Config
 
-from sqlmodel import Session
+from prayer_of_hannah import models
+__all__ = ["models"]
+
+#from sqlmodel import Session
 
 from prayer_of_hannah.dbms import Dbms
-from prayer_of_hannah.models import Author, Song_Book
+#db = Dbms(False, app.config['SQLALCHEMY_DATABASE_URI'])
+db = Dbms(False)
+db.create_database_structure()
+
+#from prayer_of_hannah.models import Author, Song_Book
 
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
-    db = Dbms(False, app.config.SQLALCHEMY_DATABASE_URI)
-    db.create_database_structure()
-
 
     # Register blueprints here
     from prayer_of_hannah.main import bp as main_bp

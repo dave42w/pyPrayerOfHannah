@@ -5,4 +5,29 @@
     <div class="content">
         <h2>This is the songs Flask blueprint</h2>
     </div>
+
+    <h1 class="title">Songs</h1>
+    <div class="content">
+        <table>
+            {% for song in songs %}
+                <tr>
+                    <td>{{ song.title }}</td>
+                    <td>
+                        <table><tr>
+                        <td>
+                            {% for author in song.authors %}
+                                {{ author.display_name }}</br>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for item in song.song_book_items %}
+                            {{ item.song_book.code }}:{{ item.nbr }}</br>
+                            {% endfor %}
+                        </td>
+                        </tr></table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}

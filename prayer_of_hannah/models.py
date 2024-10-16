@@ -131,7 +131,7 @@ class Author(SQLModelValidation, table=True):
         return (f"{self.surname}, {self.first_names}")
 
 
-class Song_Book(SQLModel, table=True):
+class Song_Book(SQLModelValidation, table=True):
     """
     A class to represent a published collection of Songs/Hymns
 
@@ -162,7 +162,7 @@ class Song_Book(SQLModel, table=True):
     name: str = Field(
         description="Book name eg Singing the Faith",
         sa_column=Column("name", String(50), index=True, unique=True, nullable=False),
-        min_length=5,
+        min_length=2,
         max_length=50,
     )
 
@@ -198,7 +198,7 @@ class Song(SQLModelValidation, table=True):
     title: str = Field(
         description="Song title eg Be Thou My Vision",
         sa_column=Column("title", String(100), index=True, unique=True, nullable=False),
-        min_length=5,
+        min_length=3,
         max_length=100,
     )
 
