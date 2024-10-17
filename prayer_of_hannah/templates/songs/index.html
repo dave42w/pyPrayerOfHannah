@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <span class="title"><h1>{% block title %} Songs {% endblock %}</h1></span>
-    <div  class="content" hx-get="{{url_for('songs.songs')}}" hx-trigger="load"></div>
+    <h1>{% block title %} Songs {% endblock %}</h1>
+    <div aria-busy="true" hx-get="{{url_for('songs.songs')}}" hx-trigger="load" hx-swap="outerHTML"></div>
 
 
 {% endblock %}

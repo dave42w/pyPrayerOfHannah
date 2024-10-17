@@ -1,60 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <script src="{{ url_for('static', filename='htmx.min.js.js') }}"></script>
-
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="{{ url_for('static', filename='pico.min.css') }}">
+    <script src="{{ url_for('static', filename='htmx.min.js.js') }}"></script>
+
     <title>{% block title %} {% endblock %} - FlaskApp</title>
-    <style>
-        h2 {
-            width: 100%;
-        }
-
-        .title {
-            margin: 5px;
-            width: 100%;
-        }
-
-        .content {
-            margin: 5px;
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-        }
-
-        .post {
-            flex: 20%;
-            padding: 10px;
-            margin: 5px;
-            background-color: #f3f3f3;
-            inline-size: 100%;
-        }
-
-        .title a {
-            color: #00a36f;
-            text-decoration: none;
-        }
-
-        nav a {
-            color: #d64161;
-            font-size: 3em;
-            margin-left: 50px;
-            text-decoration: none;
-        }
-
-    </style>
 </head>
 <body>
-    <nav>
-        <a href="{{ url_for('main.index') }}">Prayer Of Hannah</a>
-        <a href="{{ url_for('live_worship.index') }}">Live Worship</a>
-        <a href="{{ url_for('services.index') }}">Services</a>
-        <a href="{{ url_for('songs.index') }}">Songs</a>
-    </nav>
-    <hr>
-    <div class="content">
-        {% block content %} {% endblock %}
-    </div>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('main.index') }}">Prayer Of Hannah</a></li>
+                <li><a href="{{ url_for('live_worship.index') }}">Live Worship</a></li>
+                <li><a href="{{ url_for('services.index') }}">Services</a></li>
+                <li><a href="{{ url_for('songs.index') }}">Songs</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container-fluid">
+        <hr>
+        <div>
+            {% block content %} {% endblock %}
+        </div>
+    </main>
 </body>
 </html>
