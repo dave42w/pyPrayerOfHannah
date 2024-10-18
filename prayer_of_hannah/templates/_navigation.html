@@ -1,0 +1,21 @@
+{% set navigation_bar = [
+    ("home",     "main.index",         "Prayer Of Hannah"),
+    ("worship",  "live_worship.index", "Live Worship"),
+    ("services", "services.index",     "Services"),
+    ("songs",    "songs.index",        "Songs"),
+] -%}
+
+{% set active_page = active_page|default('home') -%}
+
+<nav>
+    <ul>
+        {% for id, href, caption in navigation_bar %}
+            {% if id == active_page %}
+                <li><strong>{{ caption }}</strong></li>
+            {% else %}
+                <li><a href="{{url_for(href) }}">{{ caption }}</a></li>
+            {% endif %}
+
+        {% endfor %}
+    </ul>
+</nav>

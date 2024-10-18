@@ -1,23 +1,12 @@
 {% extends 'base.html' %}
+{% set active_page = "worship" -%}
 
 {% block content %}
-<header>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('main.index') }}">Prayer Of Hannah</a></li>
-            <li><strong>Live Worship</strong></li>
-            <li><a href="{{ url_for('services.index') }}">Services</a></li>
-            <li><a href="{{ url_for('songs.index') }}">Songs</a></li>
-        </ul>
-    </nav>
-</header>
 <main class="container-fluid">
     <hr>
+    <h1>{% block title %} Live Worship {% endblock %}</h1>
     <div>
-        <h1>{% block title %} Live Worship {% endblock %}</h1>
-        <div>
-            <h2>This is the live_worship Flask blueprint</h2>
-        </div>
+        <h2>This is the live_worship Flask blueprint</h2>
     </div>
 </main>
 {% endblock %}

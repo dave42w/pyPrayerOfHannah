@@ -1,16 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<header>
-    <nav>
-        <ul>
-            <li><strong>Prayer Of Hannah</strong></li>
-            <li><a href="{{ url_for('live_worship.index') }}">Live Worship</a></li>
-            <li><a href="{{ url_for('services.index') }}">Services</a></li>
-            <li><a href="{{ url_for('songs.index') }}">Songs</a></li>
-        </ul>
-    </nav>
-</header>
 <main class="container-fluid">
     <hr>
     <span class="title"><h1>{% block title %} The Home Page of FlaskApp {% endblock %}</h1></span>

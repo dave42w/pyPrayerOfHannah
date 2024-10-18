@@ -9,5 +9,11 @@
 
     <title>{% block title %} {% endblock %} - FlaskApp</title>
 </head>
-{% block content %} {% endblock %}
+<body
+    <header>
+        {% include "_navigation.html" %}
+    </header>
+
+    {% block content %} {% endblock %}
+</body>
 </html>

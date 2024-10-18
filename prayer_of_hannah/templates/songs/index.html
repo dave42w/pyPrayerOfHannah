@@ -1,21 +1,10 @@
 {% extends 'base.html' %}
+{% set active_page = "songs" -%}
 
 {% block content %}
-<header>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('main.index') }}">Prayer Of Hannah</a></li>
-            <li><a href="{{ url_for('live_worship.index') }}">Live Worship</a></li>
-            <li><a href="{{ url_for('services.index') }}">Services</a></li>
-            <li><strong>Songs</strong></li>
-        </ul>
-    </nav>
-</header>
 <main class="container-fluid">
     <hr>
-    <div>
-        <h1>{% block title %} Songs {% endblock %}</h1>
-        <div aria-busy="true" hx-get="{{url_for('songs.songs')}}" hx-trigger="load" hx-swap="outerHTML"></div>
-    </div>
+    <h1>{% block title %} Songs {% endblock %}</h1>
+    <div aria-busy="true" hx-get="{{url_for('songs.songs')}}" hx-trigger="load" hx-swap="outerHTML"></div>
 </main>
 {% endblock %}

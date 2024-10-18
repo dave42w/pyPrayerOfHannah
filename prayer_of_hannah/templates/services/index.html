@@ -1,16 +1,7 @@
 {% extends 'base.html' %}
+{% set active_page = "services" %}
 
 {% block content %}
-<header>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('main.index') }}">Prayer Of Hannah</a></li>
-            <li><a href="{{ url_for('live_worship.index') }}">Live Worship</a></li>
-            <li><strong>Services</strong></li>
-            <li><a href="{{ url_for('songs.index') }}">Songs</a></li>
-        </ul>
-    </nav>
-</header>
 <main class="container-fluid">
     <hr>
     <h1>{% block title %} Services {% endblock %}</h1>
