@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
-    <link rel="stylesheet" href="{{ url_for('static', filename='pico.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bulma.css') }}">
+    <!--link rel="stylesheet" href="{{ url_for('static', filename='pico.min.css') }}" -->
     <script src="{{ url_for('static', filename='htmx.min.js.js') }}"></script>
 
     <title>{% block title %} {% endblock %} - FlaskApp</title>
@@ -16,6 +17,6 @@
 <main class="container-fluid">
     {% block content %} {% endblock %}
 </main>
-<footer>{% include "_footer.html" %}</footer>
+{% include "_footer.html" %}
 </body>
 </html>
