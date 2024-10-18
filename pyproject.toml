@@ -9,7 +9,7 @@ dependencies = [
     "pytest-cov>=5.0.0",
     "pytest>=8.3.3",
     "sqlmodel>=0.0.22",
-    "xmltodict>=0.14.1",
+    "xmltodict>=0.14.2",
 ]
 #pythonpath = "prayer_of_hannah"
 
