@@ -1,8 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <span class="title"><h1>{% block title %} Services {% endblock %}</h1></span>
-    <div class="content">
+<header>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('main.index') }}">Prayer Of Hannah</a></li>
+            <li><a href="{{ url_for('live_worship.index') }}">Live Worship</a></li>
+            <li><strong>Services</strong></li>
+            <li><a href="{{ url_for('songs.index') }}">Songs</a></li>
+        </ul>
+    </nav>
+</header>
+<main class="container-fluid">
+    <hr>
+    <h1>{% block title %} Services {% endblock %}</h1>
+    <div>
         <h2>This is the services Flask blueprint</h2>
     </div>
+</main>
 {% endblock %}

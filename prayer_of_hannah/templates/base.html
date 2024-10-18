@@ -9,22 +9,5 @@
 
     <title>{% block title %} {% endblock %} - FlaskApp</title>
 </head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('main.index') }}">Prayer Of Hannah</a></li>
-                <li><a href="{{ url_for('live_worship.index') }}">Live Worship</a></li>
-                <li><a href="{{ url_for('services.index') }}">Services</a></li>
-                <li><a href="{{ url_for('songs.index') }}">Songs</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main class="container-fluid">
-        <hr>
-        <div>
-            {% block content %} {% endblock %}
-        </div>
-    </main>
-</body>
+{% block content %} {% endblock %}
 </html>
