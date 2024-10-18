@@ -2,9 +2,7 @@
 {% set active_page = "songs" -%}
 
 {% block content %}
-<main class="container-fluid">
-    <hr>
-    <h1>{% block title %} Songs {% endblock %}</h1>
-    <div aria-busy="true" hx-get="{{url_for('songs.songs')}}" hx-trigger="load" hx-swap="outerHTML"></div>
-</main>
+<hr>
+<h1>{% block title %} Songs {% endblock %}</h1>
+<div aria-busy="true" hx-get="{{url_for('songs.songs')}}" hx-trigger="load" hx-swap="outerHTML"></div>
 {% endblock %}

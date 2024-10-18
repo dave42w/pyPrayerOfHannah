@@ -1,25 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<main class="container-fluid">
-    <hr>
-    <span class="title"><h1>{% block title %} The Home Page of FlaskApp {% endblock %}</h1></span>
-    <div class="content">
-        <h2>This is the main Flask blueprint</h2>
-    </div>
+<hr>
+<span class="title"><h1>{% block title %} The Home Page of FlaskApp {% endblock %}</h1></span>
+<div class="content">
+    <h2>This is the main Flask blueprint</h2>
+</div>
 
-    <h1 class="title">Song Books</h1>
-    <div class="content">
-        <table>
-            {% for song_book in song_books %}
-                <tr>
-                    <td>{{ song_book.id }}</td>
-                    <td>{{ song_book.code }}</td>
-                    <td>{{ song_book.name }}</td>
+<h1 class="title">Song Books</h1>
+<div class="content">
+    <table>
+        {% for song_book in song_books %}
+            <tr>
+                <td>{{ song_book.id }}</td>
+                <td>{{ song_book.code }}</td>
+                <td>{{ song_book.name }}</td>
 
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
-</main>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
 {% endblock %}
