@@ -90,7 +90,7 @@ class Author(Base):
     first_names: Mapped[str] = mapped_column(String(50))                    # type: ignore[misc]
 
     #songs: Mapped[List["Author_Song"]] = relationship(back_populates="author")     # type: ignore[misc]
-
+    '''
     Index(
         "compound_index_author_surname_first_names",
         "surname",
@@ -101,8 +101,8 @@ class Author(Base):
     @hybrid_property
     def display_name(self):
         return (f"{self.surname}, {self.first_names}")
+    '''
 
-'''
 class Song_Book(Base):
     """
     A class to represent a published collection of Songs/Hymns
@@ -128,9 +128,9 @@ class Song_Book(Base):
     name: Mapped[str] = mapped_column(String(50), index=True, unique=True)              # type: ignore[misc]
     url: Mapped[Optional[str]] = mapped_column(String(200), index=True, unique=True)    # type: ignore[misc]
 
-    songs: Mapped[List["Song_Book_Item"]] = relationship(back_populates="song_book")    # type: ignore[misc]
+    #songs: Mapped[List["Song_Book_Item"]] = relationship(back_populates="song_book")    # type: ignore[misc]
 
-
+'''
 class Song(Base):
     """
     A class to represent a published song
