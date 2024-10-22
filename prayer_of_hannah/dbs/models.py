@@ -1,15 +1,14 @@
-from typing import List
 from typing import Optional
 
-from sqlalchemy import ForeignKey
 from sqlalchemy import String
-from sqlalchemy.orm import relationship
 from sqlalchemy import Index
 
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import MappedAsDataclass
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+
+from sqlalchemy.schema import UniqueConstraint
 
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -85,23 +84,19 @@ class Author(Base):
 
     """
     __tablename__: str = "author"
+
+    __table_args__ = (UniqueConstraint("surname", "first_names", name="unique_author_surname_first_names"),)
+
     id: Mapped[int] = mapped_column(primary_key=True, init=False)
     surname: Mapped[str] = mapped_column(String(50))                        # type: ignore[misc]
     first_names: Mapped[str] = mapped_column(String(50))                    # type: ignore[misc]
 
     #songs: Mapped[List["Author_Song"]] = relationship(back_populates="author")     # type: ignore[misc]
-    '''
-    Index(
-        "compound_index_author_surname_first_names",
-        "surname",
-        "first_names",
-        unique=True,
-    ),
 
     @hybrid_property
     def display_name(self):
         return (f"{self.surname}, {self.first_names}")
-    '''
+
 
 class Song_Book(Base):
     """
