@@ -1,7 +1,6 @@
 from typing import Optional
 
 from sqlalchemy import String
-from sqlalchemy import Index
 
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import MappedAsDataclass
