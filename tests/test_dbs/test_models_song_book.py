@@ -38,10 +38,8 @@ def test_add_song_book(dbe) -> None:
     with Session(e) as session:
         add_test_row(session)
 
-    with Session(e) as session:
         assert get_row_count(session) == 1, f"Add song_book {get_row_count(session)}: should be one song_book in table"
 
-    with Session(e) as session:
         o: ScalarResult[Song_Book] = get_test_rows(session)
         r: Song_Book = cast(Song_Book, o.first())
         assert r.code == "StF", f"Add Song_Book Code: {r.code} should be StF"
@@ -53,13 +51,11 @@ def test_delete_song_book(dbe) -> None:
     with Session(e) as session:
         add_test_row(session)
 
-    with Session(e) as session:
         o: ScalarResult[Song_Book] = get_test_rows(session)
         r: Song_Book = cast(Song_Book, o.first())
         session.delete(r)
         session.commit()
 
-    with Session(e) as session:
         assert get_row_count(session) == 0, f"Delete song_book {get_row_count(session)}: should be zero song_book in table"
 
 def test_update_song_book(dbe) -> None:
@@ -67,16 +63,13 @@ def test_update_song_book(dbe) -> None:
     with Session(e) as session:
         add_test_row(session)
 
-    with Session(e) as session:
         o: ScalarResult[Song_Book] = get_test_rows(session)
         r: Song_Book = cast(Song_Book, o.first())
         r.name="Not Singing The Faith"
         session.commit()
 
-    with Session(e) as session:
         assert get_row_count(session) == 1, f"Update song_book {get_row_count(session)}: should be one song_book in table"
 
-    with Session(e) as session:
         o = get_test_rows(session)
         r = cast(Song_Book, o.first())
         assert r.code == "StF", f"Update song_book: {r.code} Code should be StF"
@@ -88,7 +81,6 @@ def test_no_duplicate_song_book_code(dbe) -> None:
     with Session(e) as session:
         add_test_row(session)
 
-    with Session(e) as session:
         r: Song_Book = Song_Book(code="StF", name="Not Singing the Faith", url=None)
 
         session.add(r)
@@ -98,7 +90,6 @@ def test_no_duplicate_song_book_code(dbe) -> None:
     with Session(e) as session:
         assert get_row_count(session) == 1, f"No Duplicate song_book code: {get_row_count(session)}: should be one song_book in table"
 
-    with Session(e) as session:
         o: ScalarResult[Song_Book] = get_test_rows(session)
         r = cast(Song_Book, o.first())
         assert r.code == "StF", f"No Duplicate song_book Code {r.code}: Code should be StF"
@@ -109,7 +100,6 @@ def test_no_duplicate_song_book_name(dbe) -> None:
     with Session(e) as session:
         add_test_row(session)
 
-    with Session(e) as session:
         r: Song_Book = Song_Book(code="Not StF", name="Singing the Faith", url=None)
 
         session.add(r)
@@ -119,7 +109,6 @@ def test_no_duplicate_song_book_name(dbe) -> None:
     with Session(e) as session:
         assert get_row_count(session) == 1, f"No Duplicate song_book name {get_row_count(session)}: should be one song_book in table"
 
-    with Session(e) as session:
         o: ScalarResult[Song_Book] = get_test_rows(session)
         r = cast(Song_Book, o.first())
         assert r.code == "StF", f"No Duplicate song_book name {r.code}: Code should be StF"
