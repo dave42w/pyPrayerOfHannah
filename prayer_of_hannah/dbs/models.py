@@ -124,7 +124,7 @@ class Song_Book(Base):
 
     #songs: Mapped[List["Song_Book_Item"]] = relationship(back_populates="song_book")    # type: ignore[misc]
 
-'''
+
 class Song(Base):
     """
     A class to represent a published song
@@ -145,9 +145,10 @@ class Song(Base):
     id: Mapped[int] = mapped_column(primary_key=True, init=False)
     title: Mapped[str] = mapped_column(String(100), index=True, unique=True)                # type: ignore[misc]
 
-    authors: Mapped[List["Author_Song"]] = relationship(back_populates="song")                   # type: ignore[misc]
-    song_book_items: Mapped[List["Song_Book_Item"]] = relationship(back_populates="song")   # type: ignore[misc]
+    #authors: Mapped[List["Author_Song"]] = relationship(back_populates="song")                   # type: ignore[misc]
+    #song_book_items: Mapped[List["Song_Book_Item"]] = relationship(back_populates="song")   # type: ignore[misc]
 
+'''
 
 class Author_Song(Base):
     """
