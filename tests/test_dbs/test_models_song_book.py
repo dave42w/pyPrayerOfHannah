@@ -1,4 +1,4 @@
-from typing import cast, Any
+from typing import cast
 from sqlalchemy import create_engine
 from sqlalchemy import select
 from sqlalchemy.engine import Engine
@@ -18,98 +18,163 @@ def dbe():
         return e
     return _dbe
 
-def add_test_row(session: Session) -> None:
-
-    o: Song_Book = Song_Book(code="StF", name="Singing the Faith", url=None)
-    session.add(o)
-    session.commit()
-
-def get_test_rows(session: Session) -> ScalarResult[Song_Book]:
-    return session.scalars(select(Song_Book))
-
-
-def get_row_count(session: Session) -> int:
-    o: ScalarResult[Any] = get_test_rows(session)
-    return len(o.all())
-
 
 def test_add_song_book(dbe) -> None:
     e: Engine = dbe()
     with Session(e) as session:
-        add_test_row(session)
+        code: str ="AddStF"
+        name: str = "AddSinging the Faith"
+        url: str | None = None
+        expected_len: int = 1
 
-        assert get_row_count(session) == 1, f"Add song_book {get_row_count(session)}: should be one song_book in table"
+        a1: Song_Book = Song_Book(code=code, name=name, url=url)
+        session.add(a1)
+        session.commit()
 
-        o: ScalarResult[Song_Book] = get_test_rows(session)
-        r: Song_Book = cast(Song_Book, o.first())
-        assert r.code == "StF", f"Add Song_Book Code: {r.code} should be StF"
-        assert r.name == "Singing the Faith", f"Add Song_Book name: {r.name} should be Singing the Faith"
-        assert r.url is None, f"Add Song_Book url: {r.url} should be none"
+        s1: ScalarResult[Song_Book] = session.scalars(select(Song_Book))
+        l1 = len(s1.all())
+        assert l1 == expected_len, f"Count is {l1} should be {expected_len}"
+
+        s2: ScalarResult[Song_Book] = session.scalars(select(Song_Book))
+        r2: Song_Book = cast(Song_Book, s2.first())
+        assert r2.code == code, "Add song_book Code is {r2.code} should be {code}"
+        assert r2.name == name, "Add song_book name is {r2.name} should be {name}"
+        assert r2.url is None, "Add song_book url is {r2.url} should be None"
+
+
+def test_add_song_book_with_url(dbe) -> None:
+    e: Engine = dbe()
+    with Session(e) as session:
+        code: str ="AddUrlStF"
+        name: str = "AddUrlSinging the Faith"
+        url: str = "AddUrl"
+        expected_len: int = 1
+
+        a1: Song_Book = Song_Book(code=code, name=name, url=url)
+        session.add(a1)
+        session.commit()
+
+        s1: ScalarResult[Song_Book] = session.scalars(select(Song_Book))
+        l1 = len(s1.all())
+        assert l1 == expected_len, f"Count is {l1} should be {expected_len}"
+
+        s2: ScalarResult[Song_Book] = session.scalars(select(Song_Book))
+        r2: Song_Book = cast(Song_Book, s2.first())
+        assert r2.code == code, "Add song_book Code is {r2.code} should be {code}"
+        assert r2.name == name, "Add song_book name is {r2.name} should be {name}"
+        assert r2.url == url, "Add song_book url is {r2.url} should be {url}"
+
 
 def test_delete_song_book(dbe) -> None:
     e: Engine = dbe()
     with Session(e) as session:
-        add_test_row(session)
+        code: str ="DelStF"
+        name: str = "DelSinging the Faith"
+        url: str | None = None
+        expected_len1: int = 1
+        expected_len3: int = 0
 
-        o: ScalarResult[Song_Book] = get_test_rows(session)
-        r: Song_Book = cast(Song_Book, o.first())
-        session.delete(r)
+        a1: Song_Book = Song_Book(code=code, name=name, url=url)
+        session.add(a1)
         session.commit()
 
-        assert get_row_count(session) == 0, f"Delete song_book {get_row_count(session)}: should be zero song_book in table"
+        s1: ScalarResult[Song_Book] = session.scalars(select(Song_Book))
+        l1 = len(s1.all())
+        assert l1 == expected_len1, f"Count is {l1} should be {expected_len1}"
+
+        s2: ScalarResult[Song_Book] = session.scalars(select(Song_Book))
+        r2: Song_Book = cast(Song_Book, s2.first())
+        session.delete(r2)
+        session.commit()
+
+        s3: ScalarResult[Song_Book] = session.scalars(select(Song_Book))
+        l3 = len(s3.all())
+        assert l3 == expected_len3, f"Count is {l3} should be {expected_len3}"
+
 
 def test_update_song_book(dbe) -> None:
     e: Engine = dbe()
     with Session(e) as session:
-        add_test_row(session)
+        code: str ="UpdStF"
+        name: str = "UpdSinging the Faith"
+        url: str | None = None
+        code_upd: str ="NotUpdStF"
+        name_upd: str = "NotUpdSinging the Faith"
+        expected_len: int = 1
 
-        o: ScalarResult[Song_Book] = get_test_rows(session)
-        r: Song_Book = cast(Song_Book, o.first())
-        r.name="Not Singing The Faith"
+        a1: Song_Book = Song_Book(code=code, name=name, url=url)
+        session.add(a1)
         session.commit()
 
-        assert get_row_count(session) == 1, f"Update song_book {get_row_count(session)}: should be one song_book in table"
+        s2: ScalarResult[Song_Book] = session.scalars(select(Song_Book))
+        r2: Song_Book = cast(Song_Book, s2.first())
+        r2.code=code_upd
+        r2.name=name_upd
+        session.commit()
 
-        o = get_test_rows(session)
-        r = cast(Song_Book, o.first())
-        assert r.code == "StF", f"Update song_book: {r.code} Code should be StF"
-        assert r.name == "Not Singing The Faith", f"Update song_book: {r.name} Name should be Not Singing the Faith"
+        s3: ScalarResult[Song_Book] = session.scalars(select(Song_Book))
+        l3 = len(s3.all())
+        assert l3 == expected_len, f"Count is {l3} should be {expected_len}"
+
+        s4: ScalarResult[Song_Book] = session.scalars(select(Song_Book))
+        r4 = cast(Song_Book, s4.first())
+        assert r4.code == code_upd, "Update Song_Book Code is {r.code} should be {code_upd}"
+        assert r4.name == name_upd, "Update Song_Book name is {r.name} should be {name_upd}"
 
 
 def test_no_duplicate_song_book_code(dbe) -> None:
     e: Engine = dbe()
     with Session(e) as session:
-        add_test_row(session)
+        code: str ="DupStF"
+        name: str = "DupSinging the Faith"
+        name2: str = "DupSinging the Faith2"
+        url: str | None = None
+        expected_len: int = 1
 
-        r: Song_Book = Song_Book(code="StF", name="Not Singing the Faith", url=None)
+        a1: Song_Book = Song_Book(code=code, name=name, url=url)
+        session.add(a1)
+        session.commit()
 
-        session.add(r)
+        a2: Song_Book = Song_Book(code=code, name=name2, url=url)
+        session.add(a2)
         with pytest.raises(IntegrityError):
             session.commit()
 
     with Session(e) as session:
-        assert get_row_count(session) == 1, f"No Duplicate song_book code: {get_row_count(session)}: should be one song_book in table"
+        s3: ScalarResult[Song_Book] = session.scalars(select(Song_Book))
+        l3 = len(s3.all())
+        assert l3 == expected_len, f"Count is {l3} should be {expected_len}"
 
-        o: ScalarResult[Song_Book] = get_test_rows(session)
-        r = cast(Song_Book, o.first())
-        assert r.code == "StF", f"No Duplicate song_book Code {r.code}: Code should be StF"
-        assert r.name == "Singing the Faith", f"No Duplicate song_book code {r.name}: Name should be Singing the Faith"
+        s4: ScalarResult[Song_Book] = session.scalars(select(Song_Book))
+        r4: Song_Book = cast(Song_Book, s4.first())
+        assert r4.code == code, "Dup song_book Code is {r4.code} should be {code}"
+        assert r4.name == name, "Dup song_book name is {r4.name} should be {name}"
+
 
 def test_no_duplicate_song_book_name(dbe) -> None:
     e: Engine = dbe()
     with Session(e) as session:
-        add_test_row(session)
+        code: str ="DupStF"
+        code2: str ="DupStF2"
+        name: str = "DupSinging the Faith"
+        url: str | None = None
+        expected_len: int = 1
 
-        r: Song_Book = Song_Book(code="Not StF", name="Singing the Faith", url=None)
+        a1: Song_Book = Song_Book(code=code, name=name, url=url)
+        session.add(a1)
+        session.commit()
 
-        session.add(r)
+        a2: Song_Book = Song_Book(code=code2, name=name, url=url)
+        session.add(a2)
         with pytest.raises(IntegrityError):
             session.commit()
 
     with Session(e) as session:
-        assert get_row_count(session) == 1, f"No Duplicate song_book name {get_row_count(session)}: should be one song_book in table"
+        s3: ScalarResult[Song_Book] = session.scalars(select(Song_Book))
+        l3 = len(s3.all())
+        assert l3 == expected_len, f"Count is {l3} should be {expected_len}"
 
-        o: ScalarResult[Song_Book] = get_test_rows(session)
-        r = cast(Song_Book, o.first())
-        assert r.code == "StF", f"No Duplicate song_book name {r.code}: Code should be StF"
-        assert r.name == "Singing the Faith", f"No Duplicate song_book name {r.name}: Name should be Singing the Faith"
+        s4: ScalarResult[Song_Book] = session.scalars(select(Song_Book))
+        r4: Song_Book = cast(Song_Book, s4.first())
+        assert r4.code == code, "Dup song_book Code is {r4.code} should be {code}"
+        assert r4.name == name, "Dup song_book name is {r4.name} should be {name}"
