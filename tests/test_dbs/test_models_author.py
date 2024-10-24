@@ -1,4 +1,4 @@
-from typing import cast, Any
+from typing import cast
 from sqlalchemy import create_engine
 from sqlalchemy import select
 from sqlalchemy.engine import Engine
