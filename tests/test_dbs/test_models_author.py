@@ -27,7 +27,7 @@ def test_add_author(dbe) -> None:
         display_name: str = f"{surname}, {first_names}"
         expected_len: int = 1
 
-        a1: Author = Author(surname=surname, first_names=first_names)
+        a1: Author = Author(surname=surname, first_names=first_names, songs=[])
         session.add(a1)
         session.commit()
 
@@ -40,6 +40,7 @@ def test_add_author(dbe) -> None:
         assert r2.surname == surname, "Add author Surname is {r2.surname} should be {surname}"
         assert r2.first_names == first_names, "Add author first_names is {r2.first_names} should be {first_names}"
         assert r2.display_name == display_name, "Add author display_name is {r2.display_name} should be {display_name}"
+        assert not r2.songs, "Should have empty songs is {r2.songs}"
 
 
 def test_delete_author(dbe) -> None:
@@ -50,7 +51,7 @@ def test_delete_author(dbe) -> None:
         expected_len1: int = 1
         expected_len3: int = 0
 
-        a1: Author = Author(surname=surname, first_names=first_names)
+        a1: Author = Author(surname=surname, first_names=first_names, songs=[])
         session.add(a1)
         session.commit()
 
@@ -78,7 +79,7 @@ def test_update_author(dbe) -> None:
         display_name_upd: str = f"{surname_upd}, {first_names_upd}"
         expected_len: int = 1
 
-        a1: Author = Author(surname=surname, first_names=first_names)
+        a1: Author = Author(surname=surname, first_names=first_names, songs=[])
         session.add(a1)
         session.commit()
 
@@ -97,6 +98,7 @@ def test_update_author(dbe) -> None:
         assert r4.surname == surname_upd, "Update Author Surname is {r.surname} should be {surname_upd}"
         assert r4.first_names == first_names_upd, "Update Author first_names is {r.first_names} should be {first_names_upd}"
         assert r4.display_name == display_name_upd, "Update Author display_name is {r.display_name} should be {display_name_upd}"
+        assert not r4.songs, "Should have empty songs is {r4.songs}"
 
 
 def test_no_duplicate_author(dbe) -> None:
@@ -107,11 +109,11 @@ def test_no_duplicate_author(dbe) -> None:
         display_name: str = f"{surname}, {first_names}"
         expected_len: int = 1
 
-        a1: Author = Author(surname=surname, first_names=first_names)
+        a1: Author = Author(surname=surname, first_names=first_names, songs=[])
         session.add(a1)
         session.commit()
 
-        a2: Author = Author(surname=surname, first_names=first_names)
+        a2: Author = Author(surname=surname, first_names=first_names, songs=[])
         session.add(a2)
         with pytest.raises(IntegrityError):
             session.commit()
@@ -126,3 +128,4 @@ def test_no_duplicate_author(dbe) -> None:
         assert r4.surname == surname, "Dup author Surname is {r4.surname} should be {surname}"
         assert r4.first_names == first_names, "Dup author first_names is {r4.first_names} should be {first_names}"
         assert r4.display_name == display_name, "Dup author display_name is {r4.display_name} should be {display_name}"
+        assert not r4.songs, "Should have empty songs is {r4.songs}"

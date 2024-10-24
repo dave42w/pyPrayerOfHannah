@@ -1,4 +1,5 @@
 from typing import Optional
+from typing import List
 
 from sqlalchemy import String
 
@@ -6,8 +7,10 @@ from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import MappedAsDataclass
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 
 from sqlalchemy.schema import UniqueConstraint
+from sqlalchemy.schema import ForeignKey
 
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -90,7 +93,7 @@ class Author(Base):
     surname: Mapped[str] = mapped_column(String(50))                        # type: ignore[misc]
     first_names: Mapped[str] = mapped_column(String(50))                    # type: ignore[misc]
 
-    #songs: Mapped[List["Author_Song"]] = relationship(back_populates="author")     # type: ignore[misc]
+    songs: Mapped[List["Author_Song"]] = relationship(back_populates="author")     # type: ignore[misc]
 
     @hybrid_property
     def display_name(self):
@@ -145,10 +148,10 @@ class Song(Base):
     id: Mapped[int] = mapped_column(primary_key=True, init=False)
     title: Mapped[str] = mapped_column(String(100), index=True, unique=True)                # type: ignore[misc]
 
-    #authors: Mapped[List["Author_Song"]] = relationship(back_populates="song")                   # type: ignore[misc]
+    authors: Mapped[List["Author_Song"]] = relationship(back_populates="song")              # type: ignore[misc]
     #song_book_items: Mapped[List["Song_Book_Item"]] = relationship(back_populates="song")   # type: ignore[misc]
 
-'''
+
 
 class Author_Song(Base):
     """
@@ -169,6 +172,8 @@ class Author_Song(Base):
 
     author: Mapped["Author"] = relationship(back_populates="songs")     # type: ignore[misc]
     song: Mapped["Song"] = relationship(back_populates="authors")       # type: ignore[misc]
+
+'''
 
 class Song_Book_Item(Base):
     """

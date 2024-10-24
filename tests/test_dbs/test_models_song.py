@@ -25,7 +25,7 @@ def test_add_song(dbe) -> None:
         title: str ="AddAnd Can It Be"
         expected_len: int = 1
 
-        a1: Song = Song(title=title)
+        a1: Song = Song(title=title, authors=[])
         session.add(a1)
         session.commit()
 
@@ -36,6 +36,7 @@ def test_add_song(dbe) -> None:
         s2: ScalarResult[Song] = session.scalars(select(Song))
         r2: Song = cast(Song, s2.first())
         assert r2.title == title, "Add song title is {r2.title} should be {title}"
+        assert not r2.authors, "Should have empty authors is {r2.authors}"
 
 
 def test_delete_song(dbe) -> None:
@@ -45,7 +46,7 @@ def test_delete_song(dbe) -> None:
         expected_len1: int = 1
         expected_len3: int = 0
 
-        a1: Song = Song(title=title)
+        a1: Song = Song(title=title, authors=[])
         session.add(a1)
         session.commit()
 
@@ -70,7 +71,7 @@ def test_update_song(dbe) -> None:
         title_upd: str ="NotUpdAnd Can It Be"
         expected_len: int = 1
 
-        a1: Song = Song(title=title)
+        a1: Song = Song(title=title, authors=[])
         session.add(a1)
         session.commit()
 
@@ -86,21 +87,20 @@ def test_update_song(dbe) -> None:
         s4: ScalarResult[Song] = session.scalars(select(Song))
         r4 = cast(Song, s4.first())
         assert r4.title == title_upd, "Update Song title is {r.title} should be {title_upd}"
+        assert not r4.authors, "Should have empty authors is {r4.authors}"
 
 
 def test_no_duplicate_song(dbe) -> None:
     e: Engine = dbe()
     with Session(e) as session:
         title: str ="DupAnd Can It Be"
-        first_names: str = "DupDave Z"
-        display_name: str = f"{title}, {first_names}"
         expected_len: int = 1
 
-        a1: Song = Song(title=title)
+        a1: Song = Song(title=title, authors=[])
         session.add(a1)
         session.commit()
 
-        a2: Song = Song(title=title)
+        a2: Song = Song(title=title, authors=[])
         session.add(a2)
         with pytest.raises(IntegrityError):
             session.commit()
@@ -113,3 +113,4 @@ def test_no_duplicate_song(dbe) -> None:
         s4: ScalarResult[Song] = session.scalars(select(Song))
         r4: Song = cast(Song, s4.first())
         assert r4.title == title, "Dup song title is {r4.title} should be {title}"
+        assert not r4.authors, "Should have empty authors is {r4.authors}"
