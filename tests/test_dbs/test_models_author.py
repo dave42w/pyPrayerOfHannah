@@ -18,82 +18,111 @@ def dbe():
         return e
     return _dbe
 
-def add_test_row(session: Session) -> None:
-    a: Author = Author(surname="Warnock", first_names="Dave Z")
-    session.add(a)
-    session.commit()
-
-
-def get_test_rows(session: Session) -> ScalarResult[Author]:
-    return session.scalars(select(Author))
-
-def get_row_count(session: Session) -> int:
-    o: ScalarResult[Any] = get_test_rows(session)
-    return len(o.all())
-
 
 def test_add_author(dbe) -> None:
     e: Engine = dbe()
     with Session(e) as session:
+        surname: str ="AddWarnock"
+        first_names: str = "AddDave Z"
+        display_name: str = f"{surname}, {first_names}"
+        expected_len: int = 1
 
-        add_test_row(session)
+        a1: Author = Author(surname=surname, first_names=first_names)
+        session.add(a1)
+        session.commit()
 
-        assert get_row_count(session) == 1, f"Add author {get_row_count(session)}: should be one author in table"
+        s1: ScalarResult[Author] = session.scalars(select(Author))
+        l1 = len(s1.all())
+        assert l1 == expected_len, f"Count is {l1} should be {expected_len}"
 
-        o: ScalarResult[Author] = get_test_rows(session)
-        r: Author = cast(Author, o.first())
-        assert r.surname == "Warnock", "Add author Surname should be Warnock"
-        assert r.first_names == "Dave Z", "Add author First names should be Dave Z"
-        assert r.display_name == "Warnock, Dave Z", "Add author Display name should be Warnock, Dave Z"
+        s2: ScalarResult[Author] = session.scalars(select(Author))
+        r2: Author = cast(Author, s2.first())
+        assert r2.surname == surname, "Add author Surname is {r2.surname} should be {surname}"
+        assert r2.first_names == first_names, "Add author first_names is {r2.first_names} should be {first_names}"
+        assert r2.display_name == display_name, "Add author display_name is {r2.display_name} should be {display_name}"
 
 
 def test_delete_author(dbe) -> None:
     e: Engine = dbe()
     with Session(e) as session:
-        add_test_row(session)
+        surname: str ="DelWarnock"
+        first_names: str = "DelDave Z"
+        expected_len1: int = 1
+        expected_len3: int = 0
 
-        o: ScalarResult[Author] = get_test_rows(session)
-        r: Author = cast(Author, o.first())
-        session.delete(r)
+        a1: Author = Author(surname=surname, first_names=first_names)
+        session.add(a1)
         session.commit()
 
-        assert get_row_count(session) == 0, f"delete author {get_row_count(session)}: should be zero author in table"
+        s1: ScalarResult[Author] = session.scalars(select(Author))
+        l1 = len(s1.all())
+        assert l1 == expected_len1, f"Count is {l1} should be {expected_len1}"
+
+        s2: ScalarResult[Author] = session.scalars(select(Author))
+        r2: Author = cast(Author, s2.first())
+        session.delete(r2)
+        session.commit()
+
+        s3: ScalarResult[Author] = session.scalars(select(Author))
+        l3 = len(s3.all())
+        assert l3 == expected_len3, f"Count is {l3} should be {expected_len3}"
 
 
 def test_update_author(dbe) -> None:
     e: Engine = dbe()
     with Session(e) as session:
-        add_test_row(session)
+        surname: str ="UpdWarnock"
+        first_names: str = "UpdDave Z"
+        surname_upd: str ="NotUpdWarnock"
+        first_names_upd: str = "NotUpdDave Z"
+        display_name_upd: str = f"{surname_upd}, {first_names_upd}"
+        expected_len: int = 1
 
-        o: ScalarResult[Author] = get_test_rows(session)
-        r: Author = cast(Author, o.first())
-        r.surname="Not Warnock"
+        a1: Author = Author(surname=surname, first_names=first_names)
+        session.add(a1)
         session.commit()
 
-        assert get_row_count(session) == 1, f"Update author {get_row_count(session)}: should be one author in table"
+        s2: ScalarResult[Author] = session.scalars(select(Author))
+        r2: Author = cast(Author, s2.first())
+        r2.surname=surname_upd
+        r2.first_names=first_names_upd
+        session.commit()
 
-        o = get_test_rows(session)
+        s3: ScalarResult[Author] = session.scalars(select(Author))
+        l3 = len(s3.all())
+        assert l3 == expected_len, f"Count is {l3} should be {expected_len}"
 
-        r = cast(Author, o.first())
-        assert r.surname == "Not Warnock", "Update Author Surname should be Not Warnock"
-        assert r.first_names == "Dave Z", "Update Author First names should be Dave Z"
-        assert r.display_name == "Not Warnock, Dave Z", "Update author Display name should be Not Warnock, Dave Z"
+        s4: ScalarResult[Author] = session.scalars(select(Author))
+        r4 = cast(Author, s4.first())
+        assert r4.surname == surname_upd, "Update Author Surname is {r.surname} should be {surname_upd}"
+        assert r4.first_names == first_names_upd, "Update Author first_names is {r.first_names} should be {first_names_upd}"
+        assert r4.display_name == display_name_upd, "Update Author display_name is {r.display_name} should be {display_name_upd}"
 
 
 def test_no_duplicate_author(dbe) -> None:
     e: Engine = dbe()
     with Session(e) as session:
-        add_test_row(session)
+        surname: str ="DupWarnock"
+        first_names: str = "DupDave Z"
+        display_name: str = f"{surname}, {first_names}"
+        expected_len: int = 1
 
-        r: Author = Author(surname="Warnock", first_names="Dave Z")
-        session.add(r)
+        a1: Author = Author(surname=surname, first_names=first_names)
+        session.add(a1)
+        session.commit()
+
+        a2: Author = Author(surname=surname, first_names=first_names)
+        session.add(a2)
         with pytest.raises(IntegrityError):
             session.commit()
 
     with Session(e) as session:
-        assert get_row_count(session) == 1, f"No Duplicate author {get_row_count(session)}: should be one author in table"
+        s3: ScalarResult[Author] = session.scalars(select(Author))
+        l3 = len(s3.all())
+        assert l3 == expected_len, f"Count is {l3} should be {expected_len}"
 
-        o: ScalarResult[Author] = get_test_rows(session)
-        r = cast(Author, o.first())
-        assert r.surname == "Warnock", "No Duplicate author Surname should be warnock"
-        assert r.first_names == "Dave Z", "No Duplicate author First names should be Dave Z"
+        s4: ScalarResult[Author] = session.scalars(select(Author))
+        r4: Author = cast(Author, s4.first())
+        assert r4.surname == surname, "Dup author Surname is {r4.surname} should be {surname}"
+        assert r4.first_names == first_names, "Dup author first_names is {r4.first_names} should be {first_names}"
+        assert r4.display_name == display_name, "Dup author display_name is {r4.display_name} should be {display_name}"
