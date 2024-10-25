@@ -173,7 +173,6 @@ class Author_Song(Base):
     author: Mapped["Author"] = relationship(back_populates="songs")     # type: ignore[misc]
     song: Mapped["Song"] = relationship(back_populates="authors")       # type: ignore[misc]
 
-'''
 
 class Song_Book_Item(Base):
     """
@@ -194,6 +193,11 @@ class Song_Book_Item(Base):
         the order verses are displayed (eg V1 C1 V2 B1 C1 V3 C1)
     """
     __tablename__: str = "song_book_item"
+
+    __table_args__ = (
+        UniqueConstraint("song_book_id", "song_id", name="unique_song_book_id_song_id"),
+        )
+
     id: Mapped[int] = mapped_column(primary_key=True, init=False)
     song_book_id: Mapped[int] = mapped_column(ForeignKey("song_book.id"))               # type: ignore[misc]
     song_id: Mapped[int] = mapped_column(ForeignKey("song.id"))                         # type: ignore[misc]
@@ -204,16 +208,9 @@ class Song_Book_Item(Base):
     song_book: Mapped["Song_Book"] = relationship(back_populates="song_book_items")     # type: ignore[misc]
     song: Mapped["Song"] = relationship(back_populates="song_book_items")               # type: ignore[misc]
 
-    verses: Mapped[List["Verse"]] = relationship(back_populates="song_book_item")       # type: ignore[misc]
+    #verses: Mapped[List["Verse"]] = relationship(back_populates="song_book_item")       # type: ignore[misc]
 
-    Index(
-        "compound_index_song_book_item_fks",
-        "song_book_id",
-        "song_id",
-        unique=True,
-    )
-
-
+'''
 class Verse(Base):
     """
     A class to represent a Verse of a song lyrics
