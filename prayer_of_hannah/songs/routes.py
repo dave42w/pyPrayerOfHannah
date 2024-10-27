@@ -13,3 +13,7 @@ def songs():
     with Session(get_dbe()) as session:
         songs = session.exec(select(Song).order_by(Song.title))
         return render_template('songs/songs.html', songs = songs)
+
+@bp.get('/htmx/song/<id>')
+def song(int: id):
+    print(f"songid: {id}")

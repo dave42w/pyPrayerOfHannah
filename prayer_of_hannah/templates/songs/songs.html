@@ -2,7 +2,7 @@
     <table>
         {% for song in songs %}
             <tr>
-                <td>{{ song.title }}</td>
+                <td><a href={{url_for('songs.song',id=song.id)}}> {{song.title}} </a></td>
                 <td>
                     <table><tr>
                         <td>{% for author in song.authors %}
